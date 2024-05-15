@@ -1,4 +1,4 @@
-package com.hi.base.model;
+package com.hi.base.manger;
 
 import com.hi.base.plugin.itf.ILogin;
 

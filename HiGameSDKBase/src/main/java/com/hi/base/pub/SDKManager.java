@@ -5,8 +5,10 @@ import android.content.Context;
 import android.util.Log;
 
 import com.hi.base.HiPluginManger;
-import com.hi.base.model.HiAdManager;
-import com.hi.base.model.HiPayManager;
+import com.hi.base.manger.HiAdManager;
+import com.hi.base.manger.HiPayManager;
+import com.hi.base.model.HiAdType;
+import com.hi.base.plugin.ad.HiAdListener;
 import com.hi.base.plugin.itf.IInitCallback;
 import com.hi.base.plugin.pay.IPayCallBack;
 import com.hi.base.plugin.pay.PayParams;
@@ -34,13 +36,23 @@ public class SDKManager {
 
         }
     }
+    public void setAdListener(HiAdListener listener){
+        HiAdManager.getInstance().setAdListener(listener);
+    }
     public void  GooglePlayPay(Activity activity, PayParams params, IPayCallBack callBack){
         //google支付
         Log.i(Constants.TAG,"GooglePlayPay");
         HiPayManager.getInstance().Pay(activity,params,callBack);
     }
-    public void LoadAd(){
 
+    public void showAd(HiAdType adType,String posId){
+        HiAdManager.getInstance().show(adType,posId);
+    }
+    public void closeAd(HiAdType adType){
+        HiAdManager.getInstance().close(adType);
+    }
+    public boolean isReady(HiAdType adType){
+        return HiAdManager.getInstance().isReady(adType);
     }
 
     private enum PayType{

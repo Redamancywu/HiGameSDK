@@ -4,44 +4,47 @@ package com.hi.base.plugin.ad;
  * 广告回调监听接口
  */
 public interface HiAdListener {
-
     /**
-     * 广告展示失败
-     * @param code
-     * @param msg
+     * 广告展示
+     * @param type
      */
-    public void onFailed(int code, String msg);
+    void onAdShow(String type);
 
     /**
      * 广告加载失败
-     * @param code
-     * @param msg
+     * @param type
+     * @param errorMsg
      */
-    public void onLoadFailed(int code, String msg);
+    void onAdFailed(String type, String errorMsg);
 
     /**
      * 广告加载成功
+     * @param type
      */
-    public void onLoaded();
+    void onAdReady(String type);
 
     /**
-     * 广告展示成功
+     * 广告点击
+     * @param type
      */
-    public void onShow();
+    void onAdClick(String type);
 
     /**
-     * 广告被点击
+     * 广告关闭
+     * @param type
      */
-    public void onClicked();
+    void onAdClose(String type);
 
     /**
-     * 广告被关闭
+     * 广告奖励发放
+     * @param type
      */
-    public void onClosed();
+    void onAdReward(String type);
 
     /**
-     * 广告点击跳过
+     * 广告价值
+     * @param type
      */
-    public void onSkip();
+    void onAdRevenue(String type);
 
 }

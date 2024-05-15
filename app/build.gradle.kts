@@ -44,6 +44,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(project(":HiGameSDKBase"))
     implementation(project(":HiGameSDK-GooglePay"))
+    implementation(project(":HiGameSDK-Adamob"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

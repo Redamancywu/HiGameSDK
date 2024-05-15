@@ -1,12 +1,13 @@
 package com.hi.base.plugin.itf.base;
 
+import android.app.Activity;
 import android.content.Intent;
 
 import com.hi.base.plugin.itf.IPay;
 
 public abstract class IGooglePay implements IPay {
     @Override
-    public void onCreate() {
+    public void onCreate(Activity activity) {
 
     }
 

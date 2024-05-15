@@ -6,10 +6,12 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.hi.base.model.HiPayManager;
+import com.hi.base.manger.HiAdManager;
+import com.hi.base.manger.HiPayManager;
 import com.hi.base.plugin.HiGameConfig;
 import com.hi.base.plugin.IPlugin;
 import com.hi.base.plugin.PluginInfo;
+import com.hi.base.plugin.ad.HiAd;
 import com.hi.base.plugin.itf.ILogin;
 import com.hi.base.plugin.itf.IPay;
 import com.hi.base.utils.ApkHelper;
@@ -21,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.IllegalFormatCodePointException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -47,6 +50,9 @@ public class HiPluginManger {
             }
             if (ILogin.type.equals(pluginInfo.getType())){
              ///   HiLoginManager.getInstance().Login((Activity) context,pluginInfo);
+            }
+            if (HiAd.type.equals(pluginInfo.getType())){
+                HiAdManager.getInstance().initPlugin((Activity) context,pluginInfo);
             }
         }
 
@@ -138,7 +144,7 @@ public class HiPluginManger {
         }
         return true;
     }
-    public void onCreate() {
+    public void onCreate(Activity activity) {
         if (!havePlugin()){
             return;
         }
@@ -146,7 +152,7 @@ public class HiPluginManger {
           if (pluginInfo.getPlugin() == null){
             continue;
           }
-            pluginInfo.getPlugin().onCreate();
+            pluginInfo.getPlugin().onCreate(activity);
         }
     }
     public void onStart() {

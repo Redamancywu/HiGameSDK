@@ -1,14 +1,15 @@
 package com.hi.base.plugin.itf.base;
 
+import android.app.Activity;
 import android.content.Intent;
 
+import com.hi.base.plugin.ad.HiAd;
 import com.hi.base.plugin.ad.HiBaseAd;
 
-public abstract class IBaseAd implements HiBaseAd {
+public abstract class IBaseAd implements HiAd {
 
-    public String sceneId = "";
     @Override
-    public void onCreate() {
+    public void onCreate(Activity activity) {
 
     }
 
@@ -47,8 +48,4 @@ public abstract class IBaseAd implements HiBaseAd {
 
     }
 
-    @Override
-    public void setSceneId(String sceneId) {
-        this.sceneId=sceneId;
-    }
 }

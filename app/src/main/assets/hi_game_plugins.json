@@ -11,12 +11,11 @@
   },
   {
     "type": "ad",
-    "name": "max",
-    "class": "com.ey.sdk.ad.max.MaxAd",
+    "name": "admob",
+    "class": "com.hi.ad.admob.AdmobAd",
     "params": {
-      "banner_pos": "Bottom",
-      "BANNER_POS_ID": "be3d6f78d0c2e479",
-      "INTER_VIDEO_POS_ID": "2b20c628d3f397e1",
+      "admob_banner_id": "ca-app-pub-2382347120869101/1444890093",
+      "admob_interstitial_ad_id": "ca-app-pub-2382347120869101/4630096608",
       "VIDEO_POS_ID": "65eb22f6296f9c7b",
       "NATIVE_INTERS_POS_ID": "2069498c36103150"
     }

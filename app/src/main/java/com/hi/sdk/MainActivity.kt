@@ -6,6 +6,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.hi.base.model.HiAdType
+import com.hi.base.plugin.ad.HiAdListener
 import com.hi.base.plugin.itf.IInitCallback
 import com.hi.base.plugin.pay.IPayCallBack
 import com.hi.base.plugin.pay.PayParams
@@ -41,7 +43,39 @@ class MainActivity : AppCompatActivity() {
            }
 
        })
+        HiGameSDK.getInstance().setAdListener(object :HiAdListener{
+            override fun onAdShow(type: String?) {
+              //  TODO("Not yet implemented")
+            }
+
+            override fun onAdFailed(type: String?, errorMsg: String?) {
+               // TODO("Not yet implemented")
+            }
+
+            override fun onAdReady(type: String?) {
+              //  TODO("Not yet implemented")
+            }
+
+            override fun onAdClick(type: String?) {
+              //  TODO("Not yet implemented")
+            }
+
+            override fun onAdClose(type: String?) {
+              //  TODO("Not yet implemented")
+            }
+
+            override fun onAdReward(type: String?) {
+               // TODO("Not yet implemented")
+            }
+
+            override fun onAdRevenue(type: String?) {
+               // TODO("Not yet implemented")
+            }
+
+        })
         bindings!!.button.setOnClickListener { GooglePay("123456789") }
+        bindings!!.button2.setOnClickListener { BannerAd()  }
+        bindings!!.button3.setOnClickListener { IntervalAd()   }
 
     }
     fun GooglePay(id:String){
@@ -61,6 +95,12 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
+    }
+    fun BannerAd(){
+        HiGameSDK.getInstance().show(HiAdType.Banner,"ca-app-pub-2382347120869101/1444890093");
+    }
+    fun IntervalAd(){
+        HiGameSDK.getInstance().show(HiAdType.Inters,"ca-app-pub-2382347120869101/4630096608")
     }
 
 }

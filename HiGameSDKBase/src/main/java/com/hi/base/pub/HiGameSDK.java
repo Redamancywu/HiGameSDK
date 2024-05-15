@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
+import com.hi.base.model.HiAdType;
+import com.hi.base.plugin.ad.HiAdListener;
 import com.hi.base.plugin.itf.IInitCallback;
 import com.hi.base.plugin.pay.IPayCallBack;
 import com.hi.base.plugin.pay.PayParams;
@@ -20,7 +22,9 @@ public class HiGameSDK {
         }
         return instance;
     }
-
+    public void setAdListener(HiAdListener listener){
+        SDKManager.getInstance().setAdListener(listener);
+    }
     public void init(Context context,IInitCallback initCallback){
         this.InitCallback=initCallback;
         SDKManager.getInstance().initSDK(context, new IInitCallback() {
@@ -55,5 +59,14 @@ public class HiGameSDK {
                 Log.e(Constants.TAG,"onPayCanceled: "+orderId);
             }
         });
+    }
+    public void show(HiAdType adType,String posId){
+        SDKManager.getInstance().showAd(adType,posId);
+    }
+    public void close(HiAdType adType){
+        SDKManager.getInstance().closeAd(adType);
+    }
+    public boolean isReady(HiAdType adType){
+        return SDKManager.getInstance().isReady(adType);
     }
 }

@@ -1,12 +1,13 @@
 package com.hi.base.plugin;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 
 public interface IPlugin {
     void init(Context context,HiGameConfig config);
-    void onCreate();
+    void onCreate(Activity activity);
 
     void onStart();
 
