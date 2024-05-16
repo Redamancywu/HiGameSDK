@@ -35,6 +35,7 @@ public class AdmobInterstitialAd extends HiBBaseAd {
         if (config.contains("admob_interstitial_ad_id")){
             InterstitialAdId= config.getString("admob_interstitial_ad_id");
         }
+        Log.d(Constants.TAG, "AdmobInterstitialAd init. posId:"+InterstitialAdId+";admob posId:" + InterstitialAdId);
 
 
     }
@@ -51,6 +52,7 @@ public class AdmobInterstitialAd extends HiBBaseAd {
 
     @Override
     public void load(String posId) {
+        Log.d(Constants.TAG, "AdmobInterstitialAd load begin. posId:"+posId+";admob posId:" + posId);
         if (loading) {
             if (adlistener != null) {
                 adlistener.onAdFailed("An ad is already loading");

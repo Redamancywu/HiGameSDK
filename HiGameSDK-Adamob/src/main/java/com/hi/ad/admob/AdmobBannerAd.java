@@ -35,6 +35,7 @@ public class AdmobBannerAd extends HiBBaseAd {
         if (config.contains("admob_banner_id")){
             ADMOB_BANNER_ID=config.getString("admob_banner_id");
         }
+        Log.d(Constants.TAG,"AdmobBannerAd init ADMOB_BANNER_ID="+ADMOB_BANNER_ID);
     }
 
     @Override
@@ -54,6 +55,7 @@ public class AdmobBannerAd extends HiBBaseAd {
 
     @Override
     public void load(String posId) {
+        Log.d(Constants.TAG,"AdmobBannerAd load posId="+posId);
         if (loading){
             Log.d(Constants.TAG,"AdmobBannerAd load is loading");
             return;

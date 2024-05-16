@@ -1,11 +1,8 @@
 package com.hi.base.manger;
 
 import android.app.Activity;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 
-import com.hi.base.handler.HiAdHandler;
 import com.hi.base.model.HiAdInstType;
 import com.hi.base.model.HiAdType;
 import com.hi.base.plugin.HiGameConfig;
@@ -27,21 +24,13 @@ public class HiAdManager {
     private HiAd ad;
     private HiBaseAd baseAd;
     private HiAdListener adListener;
-    private List<HiAdHandler> ahLists = new ArrayList<>();
     private PluginInfo pluginInfo;
-    private int loadIndex = 0;
-    private Map<HiAdType, List<HiAdHandler>> allHandlers;
-
     public static HiAdManager getInstance() {
         if (instance == null) {
             instance = new HiAdManager();
         }
         return instance;
     }
-    public HiAdManager(){
-        allHandlers=new HashMap<>();
-    }
-
     public void initPlugin(Activity activity, PluginInfo pluginInfo) {
         if (pluginInfo.getPlugin() == null) {
             Log.e(Constants.TAG, "Ad plugin is null");
@@ -50,15 +39,11 @@ public class HiAdManager {
         try {
             if (pluginInfo.getPlugin() instanceof HiAd) {
                 ad = (HiAd) pluginInfo.getPlugin();
-//                adListener = (HiAdListener) pluginInfo.getPlugin();
-//                if (ad != null) {
-//                    ad.init(activity, pluginInfo.getGameConfig());
-//                }
                 ad.setInitializationListener(new HiAdResult() {
                     @Override
                     public void onResult(boolean flag) {
-                        startLoadIds();
-
+                        HiGameConfig config=new HiGameConfig();
+                        baseAd.load(String.valueOf(config));
                     }
                 });
 
@@ -67,20 +52,6 @@ public class HiAdManager {
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-    private void startLoadIds() {
-        Log.d(Constants.TAG,"IAd startLoadIds size:"+ahLists.size()+" load index :"+loadIndex);
-        if (loadIndex < ahLists.size()){
-            HiAdHandler adHandler = ahLists.get(loadIndex);
-            adHandler.load();
-            loadIndex++;
-            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    startLoadIds();
-                }
-            }, 500);
         }
     }
     public IBaseAd getAdPlugin(HiAdInstType adInstType){
@@ -100,23 +71,6 @@ public class HiAdManager {
     public void setAdListener(HiAdListener listener) {
         this.adListener = listener;
     }
-    //展示广告
-    public void show(HiAdType adType,String postId){
-        if (!allHandlers.containsKey(adType)){
-            return;
-        }
-    }
-    public void close(HiAdType adType){
-        if (!allHandlers.containsKey(adType)){
-            return;
-        }
-    }
-    public boolean isReady(HiAdType adType){
-        if (!allHandlers.containsKey(adType)){
-            return false;
-        }
 
-        return true;
-    }
 
 }
