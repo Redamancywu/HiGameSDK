@@ -11,7 +11,7 @@ import com.hi.base.manger.HiPayManager;
 import com.hi.base.plugin.HiGameConfig;
 import com.hi.base.plugin.IPlugin;
 import com.hi.base.plugin.PluginInfo;
-import com.hi.base.plugin.ad.HiAd;
+import com.hi.base.plugin.ad.IAd;
 import com.hi.base.plugin.itf.ILogin;
 import com.hi.base.plugin.itf.IPay;
 import com.hi.base.utils.ApkHelper;
@@ -23,7 +23,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.IllegalFormatCodePointException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -51,7 +50,7 @@ public class HiPluginManger {
             if (ILogin.type.equals(pluginInfo.getType())){
              ///   HiLoginManager.getInstance().Login((Activity) context,pluginInfo);
             }
-            if (HiAd.type.equals(pluginInfo.getType())){
+            if (IAd.type.equals(pluginInfo.getType())){
                 HiAdManager.getInstance().initPlugin((Activity) context,pluginInfo);
             }
         }

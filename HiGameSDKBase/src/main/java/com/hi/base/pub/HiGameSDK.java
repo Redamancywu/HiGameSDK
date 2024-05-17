@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
+import com.hi.base.manger.HiAdManager;
 import com.hi.base.model.HiAdType;
-import com.hi.base.plugin.ad.HiAdListener;
+import com.hi.base.plugin.HiGameConfig;
+import com.hi.base.plugin.ad.IAdInitializationListener;
 import com.hi.base.plugin.itf.IInitCallback;
 import com.hi.base.plugin.pay.IPayCallBack;
 import com.hi.base.plugin.pay.PayParams;
@@ -21,9 +23,6 @@ public class HiGameSDK {
             instance=new HiGameSDK();
         }
         return instance;
-    }
-    public void setAdListener(HiAdListener listener){
-        SDKManager.getInstance().setAdListener(listener);
     }
     public void init(Context context,IInitCallback initCallback){
         this.InitCallback=initCallback;
@@ -60,13 +59,27 @@ public class HiGameSDK {
             }
         });
     }
-    public void show(HiAdType adType,String posId){
-        SDKManager.getInstance().showAd(adType,posId);
+    public void setAdInitSDK(){
+        HiAdManager.getInstance().setInitializationListener(new IAdInitializationListener() {
+            @Override
+            public void onInitSuccess() {
+                //初始化成功
+                InitCallback.onInitSuccess();
+                Log.d(Constants.TAG,"onInitSuccess: ");
+            }
+
+            @Override
+            public void onInitFailed(int code, String msg) {
+                //初始化失败
+                InitCallback.onInitFail(code,msg);
+                Log.d(Constants.TAG,"onInitFailed: "+code+"  "+msg);
+            }
+        });
     }
-    public void close(HiAdType adType){
-        SDKManager.getInstance().closeAd(adType);
+    public void showBanner(Context context,String posId){
+        SDKManager.getInstance().showBannerAd(context, posId);
     }
-    public boolean isReady(HiAdType adType){
-        return SDKManager.getInstance().isReady(adType);
+    public void showInterstitial(Activity context,String posId){
+        SDKManager.getInstance().showInterstitialAd(context, posId);
     }
 }

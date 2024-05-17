@@ -5,30 +5,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
-import com.hi.base.model.HiAdInstType;
 import com.hi.base.plugin.HiGameConfig;
-import com.hi.base.plugin.ad.HiAd;
-import com.hi.base.plugin.ad.HiAdResult;
-import com.hi.base.plugin.ad.HiBaseAd;
-import com.hi.base.plugin.itf.HiBaseAdlistener;
-import com.hi.base.plugin.itf.base.IBaseAd;
+import com.hi.base.plugin.ad.AdApter;
 import com.hi.base.utils.Constants;
 
-public class AdmobAd extends  IBaseAd{
-    private HiAdResult listener;
+public class AdmobAd extends AdApter {
     @Override
     public void init(Context context, HiGameConfig config) {
         MobileAds.initialize(context, new OnInitializationCompleteListener() {
             @Override
-            public void onInitializationComplete(@NonNull InitializationStatus initializationStatus) {
-                Log.d(Constants.TAG, "AdmobAd init success");
-                if (listener!=null){
-                    listener.onResult(true);
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+                Log.d(Constants.TAG, "AdmobAd init result."+ initializationStatus);
+                if (initializationListener != null) {
+                    initializationListener.onInitSuccess();
                 }
             }
         });
@@ -40,17 +32,42 @@ public class AdmobAd extends  IBaseAd{
     }
 
     @Override
+    public void onStart() {
+
+    }
+
+    @Override
+    public void onStop() {
+
+    }
+
+    @Override
+    public void onRestart() {
+
+    }
+
+    @Override
+    public void onResume() {
+
+    }
+
+    @Override
+    public void onPause() {
+
+    }
+
+    @Override
+    public void onDestroy() {
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+    }
+
+    @Override
     public void onNewIntent(Intent intent) {
 
-    }
-
-    @Override
-    public void setInitializationListener(HiAdResult adResult) {
-            this.listener=adResult;
-    }
-
-    @Override
-    public HiBaseAd getAdPlugin(HiAdInstType instType) {
-        return null;
     }
 }

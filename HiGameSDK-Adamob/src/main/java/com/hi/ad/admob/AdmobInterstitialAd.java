@@ -2,11 +2,7 @@ package com.hi.ad.admob;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
-import android.view.View;
-
-import androidx.annotation.NonNull;
 
 import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
@@ -15,47 +11,41 @@ import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.hi.base.plugin.HiGameConfig;
-import com.hi.base.plugin.itf.HiBaseAdlistener;
-import com.hi.base.plugin.itf.base.HiBBaseAd;
+import com.hi.base.plugin.ad.inters.InterstitialAdAdapter;
 import com.hi.base.utils.Constants;
 
-public class AdmobInterstitialAd extends HiBBaseAd {
+
+/**
+ * Admob 插屏广告实现类
+ */
+public abstract class AdmobInterstitialAd extends InterstitialAdAdapter {
+
     private volatile boolean loading = false;
     private volatile boolean ready = false;
-    private HiBaseAdlistener adlistener;
-    private Context mContext;
-    private Activity mActivity;
-    private String InterstitialAdId;
+
     private InterstitialAd mInterstitialAd;
+    private HiGameConfig pluginParams;                      //插件参数
+    private String InterstitialAdId;                       //插屏广告位ID
+
     @Override
-    public void init(Context context, HiGameConfig config) {
-        mContext = context;
-        mActivity = (Activity) context;
-        //初始化
-        if (config.contains("admob_interstitial_ad_id")){
-            InterstitialAdId= config.getString("admob_interstitial_ad_id");
+    public void init(Context context, HiGameConfig params) {
+        this.pluginParams = params;
+        this.loading = false;
+        this.ready = false;
+        if (params.contains("interstitial_pos_id")){
+            InterstitialAdId= params.getString("interstitial_pos_id");
         }
-        Log.d(Constants.TAG, "AdmobInterstitialAd init. posId:"+InterstitialAdId+";admob posId:" + InterstitialAdId);
-
-
     }
-
-    @Override
-    public void onNewIntent(Intent intent) {
-
-    }
-
     @Override
     public boolean isReady() {
-        return false;
+        return ready;
     }
-
     @Override
-    public void load(String posId) {
-        Log.d(Constants.TAG, "AdmobInterstitialAd load begin. posId:"+posId+";admob posId:" + posId);
+    public void load(Activity context, String posId) {
+
         if (loading) {
-            if (adlistener != null) {
-                adlistener.onAdFailed("An ad is already loading");
+            if (adListener != null) {
+                adListener.onLoadFailed(Constants.CODE_LOAD_FAILED, "An ad is already loading");
             }
             Log.w(Constants.TAG, "AdmobInterstitialAd is already loading. ignored");
             return;
@@ -63,44 +53,50 @@ public class AdmobInterstitialAd extends HiBBaseAd {
 
         if (ready) {
             Log.w(Constants.TAG, "AdmobInterstitialAd is already loaded. ignored");
-            if (adlistener != null) {
-                adlistener.onAdLoaded();
+            if (adListener != null) {
+                adListener.onLoaded();
             }
             return;
         }
         Log.d(Constants.TAG, "AdmobInterstitialAd load begin. posId:"+posId+";admob posId:" + posId);
         loading = true;
         ready = false;
-        AdRequest adRequest=new AdRequest.Builder().build();
-        InterstitialAd.load(mContext, InterstitialAdId, adRequest, new InterstitialAdLoadCallback() {
-            @Override
-            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                super.onAdFailedToLoad(loadAdError);
-                loading = false;
-                ready=false;
-                if (adlistener != null) {
-                    adlistener.onAdFailed(loadAdError.getMessage());
-                }
-            }
+        AdRequest adRequest = new AdRequest.Builder().build();
+        InterstitialAd.load(context, InterstitialAdId, adRequest,
+                new InterstitialAdLoadCallback() {
+                    @Override
+                    public void onAdLoaded(InterstitialAd interstitialAd) {
+                        Log.d(Constants.TAG, "AdmobInterstitialAd load success.");
+                        mInterstitialAd = interstitialAd;
+                        loading = false;
+                        ready = true;
+                        if (adListener != null) {
+                            adListener.onLoaded();
+                        }
 
-            @Override
-            public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
-                super.onAdLoaded(interstitialAd);
-                loading=false;
-                ready=true;
-                if (adlistener!=null){
-                    adlistener.onAdLoaded();
-                }
-            }
-        });
+                    }
+
+                    @Override
+                    public void onAdFailedToLoad(LoadAdError loadAdError) {
+                        // Handle the error
+                        Log.e(Constants.TAG, "AdmobInterstitialAd load failed."+loadAdError.getCode()+";"+loadAdError.getMessage());
+                        loading = false;
+                        ready = false;
+                        mInterstitialAd = null;
+                        if (adListener != null) {
+                            adListener.onLoadFailed(Constants.CODE_LOAD_FAILED, loadAdError.getMessage());
+                        }
+                    }
+                });
     }
 
     @Override
-    public void show() {
+    public void show(Activity context) {
+
         if (mInterstitialAd == null) {
             Log.e(Constants.TAG, "AdmobInterstitialAd show failed. mInterstitialAd is null");
-            if (adlistener != null) {
-                adlistener.onAdFailed("ad is null");
+            if (adListener != null) {
+                adListener.onFailed(Constants.CODE_SHOW_FAILED, "ad is null");
             }
             return;
         }
@@ -108,8 +104,8 @@ public class AdmobInterstitialAd extends HiBBaseAd {
         mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback(){
             @Override
             public void onAdClicked() {
-                if (adlistener != null) {
-                    adlistener.onAdClick();
+                if (adListener != null) {
+                    adListener.onClicked();
                 }
             }
 
@@ -117,8 +113,8 @@ public class AdmobInterstitialAd extends HiBBaseAd {
             public void onAdDismissedFullScreenContent() {
                 // Called when ad is dismissed.
                 // Set the ad reference to null so you don't show the ad a second time.
-                if (adlistener != null) {
-                    adlistener.onAdClose();
+                if (adListener != null) {
+                    adListener.onClosed();
                 }
 
             }
@@ -128,8 +124,8 @@ public class AdmobInterstitialAd extends HiBBaseAd {
                 // Called when ad fails to show.
                 Log.e(Constants.TAG, "AdmobInterstitialAd failed to show."+adError.getCode()+";"+adError.getMessage());
 
-                if (adlistener != null) {
-                    adlistener.onAdFailed(adError.getMessage());
+                if (adListener != null) {
+                    adListener.onFailed(Constants.CODE_SHOW_FAILED, adError.getMessage());
                 }
             }
 
@@ -142,28 +138,13 @@ public class AdmobInterstitialAd extends HiBBaseAd {
             @Override
             public void onAdShowedFullScreenContent() {
                 // Called when ad is shown.
-                if (adlistener != null) {
-                    adlistener.onAdShow();
+                if (adListener != null) {
+                    adListener.onShow();
                 }
             }
         });
         ready = false;
-        mInterstitialAd.show(mActivity);
+        mInterstitialAd.show(context);
         mInterstitialAd = null;
-    }
-
-    @Override
-    public void close() {
-
-    }
-
-    @Override
-    public void setListener(HiBaseAdlistener listener) {
-
-    }
-
-    @Override
-    public View setAdContainer() {
-        return null;
     }
 }

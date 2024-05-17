@@ -14,8 +14,8 @@
     "name": "admob",
     "class": "com.hi.ad.admob.AdmobAd",
     "params": {
-      "admob_banner_id": "ca-app-pub-2382347120869101/1444890093",
-      "admob_interstitial_ad_id": "ca-app-pub-2382347120869101/4630096608",
+      "banner_pos_id": "ca-app-pub-2382347120869101/1444890093",
+      "interstitial_pos_id": "ca-app-pub-2382347120869101/4630096608",
       "VIDEO_POS_ID": "65eb22f6296f9c7b",
       "NATIVE_INTERS_POS_ID": "2069498c36103150"
     }

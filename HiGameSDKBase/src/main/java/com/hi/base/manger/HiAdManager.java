@@ -1,76 +1,92 @@
 package com.hi.base.manger;
 
 import android.app.Activity;
+import android.text.TextUtils;
 import android.util.Log;
-
-import com.hi.base.model.HiAdInstType;
-import com.hi.base.model.HiAdType;
-import com.hi.base.plugin.HiGameConfig;
 import com.hi.base.plugin.PluginInfo;
-import com.hi.base.plugin.ad.HiAd;
-import com.hi.base.plugin.ad.HiAdListener;
-import com.hi.base.plugin.ad.HiAdResult;
-import com.hi.base.plugin.ad.HiBaseAd;
-import com.hi.base.plugin.itf.base.IBaseAd;
+import com.hi.base.plugin.ad.IAd;
+import com.hi.base.plugin.ad.IAdInitializationListener;
 import com.hi.base.utils.Constants;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class HiAdManager {
     private static HiAdManager instance;
-    private HiAd ad;
-    private HiBaseAd baseAd;
-    private HiAdListener adListener;
     private PluginInfo pluginInfo;
+    private IAd adParentPlugin;
+    private IAdInitializationListener initializationListener;
+
     public static HiAdManager getInstance() {
         if (instance == null) {
             instance = new HiAdManager();
         }
         return instance;
     }
+    private HiAdManager(){
+
+    }
+    /**
+     * 设置初始化回调
+     * @param initializationListener
+     */
+    public void setInitializationListener(IAdInitializationListener initializationListener) {
+        this.initializationListener = initializationListener;
+    }
+
     public void initPlugin(Activity activity, PluginInfo pluginInfo) {
         if (pluginInfo.getPlugin() == null) {
             Log.e(Constants.TAG, "Ad plugin is null");
             return;
         }
         try {
-            if (pluginInfo.getPlugin() instanceof HiAd) {
-                ad = (HiAd) pluginInfo.getPlugin();
-                ad.setInitializationListener(new HiAdResult() {
-                    @Override
-                    public void onResult(boolean flag) {
-                        HiGameConfig config=new HiGameConfig();
-                        baseAd.load(String.valueOf(config));
+            this.pluginInfo=pluginInfo;
+            adParentPlugin = (IAd) pluginInfo.getPlugin();
+            adParentPlugin.setInitializationListener(new IAdInitializationListener() {
+                @Override
+                public void onInitSuccess() {
+                    if (initializationListener != null) {
+                        initializationListener.onInitSuccess();
+                        Log.d(Constants.TAG, "onInitSuccess");
                     }
-                });
+                }
 
-                ad.init(activity, pluginInfo.getGameConfig());
+                @Override
+                public void onInitFailed(int code, String msg) {
+                    if (initializationListener != null) {
+                        initializationListener.onInitFailed(code, msg);
+                    }
 
-            }
+                }
+            });
+            adParentPlugin.init(activity, pluginInfo.getGameConfig());
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    public IBaseAd getAdPlugin(HiAdInstType adInstType){
-        if (ad != null){
-            ad.getAdPlugin(adInstType);
+    /**
+     * 获取子插件
+     * @param type
+     * @return
+     */
+    public PluginInfo getChild(String type) {
+        // 获取子插件
+        Log.d(Constants.TAG, "getChild type:" + type);
+        if (this.pluginInfo == null || TextUtils.isEmpty(type)) {
+            Log.e(Constants.TAG, "getChild failed. Ad register failed or child type is invalid");
+            return null;
         }
-        return null;
-
-    }
-    public HiGameConfig getConfig(){
-        if (pluginInfo != null){
-            return pluginInfo.getGameConfig();
+        List<PluginInfo> children = this.pluginInfo.getChildren();
+        Log.d(Constants.TAG, "children config:" + children);
+        if (children == null || children.size() ==0) {
+            Log.e(Constants.TAG, "getChild failed. no children config");
+            return null;
         }
+        for (PluginInfo child : children) {
+            if (type.equalsIgnoreCase(child.getType())) {
+                return child;
+            }
+        }
+
+        Log.e(Constants.TAG, "Ad getChild failed. no child found for type:" + type);
         return null;
     }
-    // 初始化广告监听器
-    public void setAdListener(HiAdListener listener) {
-        this.adListener = listener;
-    }
-
-
 }

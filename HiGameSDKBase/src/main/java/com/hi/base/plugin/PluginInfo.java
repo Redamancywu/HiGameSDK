@@ -80,7 +80,4 @@ public class PluginInfo {
     public void setChildren(List<PluginInfo> children) {
         this.children = children;
     }
-    public HiGameConfig getConfig() {
-        return gameConfig;
-    }
 }

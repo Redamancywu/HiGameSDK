@@ -37,7 +37,6 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     //Adamob
-
     implementation ("com.google.android.gms:play-services-ads:23.1.0")
 
 
