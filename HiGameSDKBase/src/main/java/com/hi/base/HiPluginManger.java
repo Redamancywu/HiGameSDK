@@ -7,11 +7,13 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.hi.base.manger.HiAdManager;
+import com.hi.base.manger.HiAnalyticsManager;
 import com.hi.base.manger.HiPayManager;
 import com.hi.base.plugin.HiGameConfig;
 import com.hi.base.plugin.IPlugin;
 import com.hi.base.plugin.PluginInfo;
 import com.hi.base.plugin.ad.IAd;
+import com.hi.base.plugin.analytics.IAnalytics;
 import com.hi.base.plugin.itf.ILogin;
 import com.hi.base.plugin.itf.IPay;
 import com.hi.base.utils.ApkHelper;
@@ -52,6 +54,9 @@ public class HiPluginManger {
             }
             if (IAd.type.equals(pluginInfo.getType())){
                 HiAdManager.getInstance().initPlugin((Activity) context,pluginInfo);
+            }
+            if (IAnalytics.type.equals(pluginInfo.getType())){
+                HiAnalyticsManager.getInstance().registerPlugin(context,pluginInfo);
             }
         }
 
