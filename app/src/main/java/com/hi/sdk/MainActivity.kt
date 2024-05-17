@@ -45,7 +45,12 @@ class MainActivity : AppCompatActivity() {
         bindings!!.button.setOnClickListener { GooglePay("123456789") }
         bindings!!.button2.setOnClickListener { BannerAd()  }
         bindings!!.button3.setOnClickListener { IntervalAd()   }
+        bindings!!.bthLoginGoogle.setOnClickListener { GoogleLogin() }
 
+    }
+
+    private fun GoogleLogin() {
+      //  TODO("Not yet implemented")
     }
 
     private fun BannerAd() {

@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.hi.base.manger.HiAdManager;
+import com.hi.base.manger.HiLoginManager;
 import com.hi.base.manger.HiPayManager;
 import com.hi.base.plugin.HiGameConfig;
 import com.hi.base.plugin.IPlugin;
@@ -48,7 +49,7 @@ public class HiPluginManger {
                 HiPayManager.getInstance().InitPay((Activity) context,pluginInfo);
             }
             if (ILogin.type.equals(pluginInfo.getType())){
-             ///   HiLoginManager.getInstance().Login((Activity) context,pluginInfo);
+                HiLoginManager.getInstance().InitLoginPlugin((Activity) context,pluginInfo);
             }
             if (IAd.type.equals(pluginInfo.getType())){
                 HiAdManager.getInstance().initPlugin((Activity) context,pluginInfo);

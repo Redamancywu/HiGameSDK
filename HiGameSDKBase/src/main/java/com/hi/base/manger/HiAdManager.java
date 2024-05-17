@@ -90,4 +90,7 @@ public class HiAdManager {
         Log.e(Constants.TAG, "Ad getChild failed. no child found for type:" + type);
         return null;
     }
+    public void showBannerAd(){
+        BannerAdManager.getInstance().show();
+    }
 }
