@@ -12,6 +12,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/HiGameSDK-Adamob" />
+            <option value="$PROJECT_DIR$/HiGameSDK-Adjust" />
             <option value="$PROJECT_DIR$/HiGameSDK-GooglePay" />
             <option value="$PROJECT_DIR$/HiGameSDK-Login" />
             <option value="$PROJECT_DIR$/HiGameSDKBase" />
