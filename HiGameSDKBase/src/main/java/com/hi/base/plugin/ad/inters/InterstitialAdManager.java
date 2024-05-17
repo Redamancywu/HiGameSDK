@@ -25,7 +25,7 @@ public class InterstitialAdManager {
     private String posId;
 
     private Context context;
-    private PluginInfo pluginInfo;
+
 
     /**
      * 游戏层调用时传入的广告回调监听器
@@ -89,11 +89,8 @@ public class InterstitialAdManager {
         }
     };
 
-    public InterstitialAdManager(String posId, Context context) {
-        HiGameConfig config=new HiGameConfig();
-        if (config.contains("interstitial_pos_id")){
-            posId=config.getString("interstitial_pos_id");
-        }
+    public InterstitialAdManager( Context context,String posId) {
+        this.posId=posId;
         this.context = context;
         Log.d(Constants.TAG, "InterstitialAdManager posId:"+posId+"TYPE:"+TYPE);
         registerPlugin(HiAdManager.getInstance().getChild(TYPE));
@@ -118,6 +115,7 @@ public class InterstitialAdManager {
         this.plugin = (IInterstitialAd) plugin;
         this.plugin.setAdListener(adExListener);
         this.plugin.init(context, pluginInfo.getGameConfig());
+        load(context);
     }
 
     public void setAdListener(IInterstitialAdListener adListener) {
@@ -137,11 +135,11 @@ public class InterstitialAdManager {
     /**
      * 加载广告
      */
-    public void load(Activity context) {
+    public void load(Context context) {
         if (!isPluginValid(true)) return;
 
         try {
-            this.plugin.load(context, posId);
+            this.plugin.load((Activity) context, posId);
         } catch (Exception e) {
             if (adListener != null) {
                 adListener.onLoadFailed(Constants.CODE_LOAD_FAILED, "ad load failed with exception:"+e.getMessage());

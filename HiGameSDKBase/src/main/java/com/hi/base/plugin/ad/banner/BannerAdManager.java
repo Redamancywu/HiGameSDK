@@ -17,6 +17,7 @@ import com.hi.base.utils.Constants;
 
 public class BannerAdManager {
     public final static String TYPE= HiAdType.Banner.getAdType()==null?"":HiAdType.Banner.getAdType();
+    private static BannerAdManager instance;
     private BannerAdListener bannerAdListener;
     /**
      * 广告位ID（一般如果有多个广告位，用于区分母包调用的是哪个广告）
@@ -31,6 +32,15 @@ public class BannerAdManager {
      * 游戏层调用时传入的广告回调监听器
      *
      */
+    public BannerAdManager(){
+
+    }
+    public static BannerAdManager getInstance() {
+        if (instance==null){
+            instance=new BannerAdManager();
+        }
+        return instance;
+    }
     private IBannerListener bannerListener;
 
     private IBannerListener adExListener=new IBannerListener() {
@@ -91,11 +101,7 @@ public class BannerAdManager {
         }
     };
 
-    public BannerAdManager(String posId, Context context) {
-        HiGameConfig config=new HiGameConfig();
-        if (config.contains("banner_pos_id")){
-            posId=config.getString("banner_pos_id");
-        }
+    public BannerAdManager(Context context,String posId) {
         this.posId=posId;
         this.context = context;
         Log.d(Constants.TAG, "BannerAdManager init:"+ HiAdManager.getInstance().getChild(TYPE));
@@ -106,7 +112,6 @@ public class BannerAdManager {
      * @param pluginInfo
      */
     private void registerPlugin(PluginInfo pluginInfo) {
-        Log.d(Constants.TAG, "registerPlugin in BannerAd:"+pluginInfo);
         if(pluginInfo == null) {
             Log.w(Constants.TAG, "registerPlugin in BannerAd failed. pluginInfo is null");
             return;
@@ -114,12 +119,13 @@ public class BannerAdManager {
 
         IPlugin plugin = (IPlugin) ClassUtils.doNoArgsInstance(pluginInfo.getClazz());
         if(!(plugin instanceof BannerAdListener)) {
-            Log.w(Constants.TAG, "registerPlugin in BannerAd failed. plugin is not implement IBannerAd");
+            Log.w(Constants.TAG, "registerPlugin in BannerAd failed. plugin is not implement BannerAdListener");
             return;
         }
         this.bannerAdListener = (BannerAdListener) plugin;
         this.bannerAdListener.setAdListener(adExListener);
         this.bannerAdListener.init(context, pluginInfo.getGameConfig());
+        load(context);
     }
     public void setAdListener(IBannerListener adListener) {
         this.bannerListener = adListener;
@@ -134,6 +140,17 @@ public class BannerAdManager {
             }
             e.printStackTrace();
         }
+    }
+    public void show(){
+        try {
+            this.bannerAdListener.show((Activity) context);
+        }catch (Exception e){
+            if (bannerListener != null){
+                bannerListener.onFailed(Constants.CODE_SHOW_FAILED, "ad show failed. plugin is null");
+            }
+            e.printStackTrace();
+        }
+
     }
     // 判断当前插件实现类是否存在
     private boolean isPluginValid(boolean triggerEvent) {
@@ -165,5 +182,7 @@ public class BannerAdManager {
         if (!isPluginValid(true)) return;
         this.bannerAdListener.setAdSize(adSize);
     }
+
+
 
 }

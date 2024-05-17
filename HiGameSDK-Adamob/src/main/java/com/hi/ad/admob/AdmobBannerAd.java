@@ -2,8 +2,10 @@ package com.hi.ad.admob;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -11,23 +13,71 @@ import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.LoadAdError;
 import com.hi.base.plugin.HiGameConfig;
+import com.hi.base.plugin.ad.AdApter;
+import com.hi.base.plugin.ad.AdContainer;
 import com.hi.base.plugin.ad.banner.BannerAdApter;
 import com.hi.base.plugin.ad.banner.IBannerListener;
 import com.hi.base.utils.Constants;
 
-public abstract class AdmobBannerAd extends BannerAdApter {
+public  class AdmobBannerAd extends BannerAdApter {
     private volatile boolean loading = false;
     private volatile boolean ready = false;
 
     private AdView bannerAd;
     private HiGameConfig config;
     private String bannerPosId;
+    private ViewGroup bannerContainer;
     @Override
     public void init(Context context, HiGameConfig config) {
         this.config=config;
         if (config.contains("banner_pos_id")) {
             bannerPosId = config.getString("banner_pos_id");
         }
+    }
+
+    @Override
+    public void onCreate(Activity activity) {
+
+    }
+
+    @Override
+    public void onStart() {
+
+    }
+
+    @Override
+    public void onStop() {
+
+    }
+
+    @Override
+    public void onRestart() {
+
+    }
+
+    @Override
+    public void onResume() {
+
+    }
+
+    @Override
+    public void onPause() {
+
+    }
+
+    @Override
+    public void onDestroy() {
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+    }
+
+    @Override
+    public void onNewIntent(Intent intent) {
+
     }
 
     @Override
@@ -106,7 +156,9 @@ public abstract class AdmobBannerAd extends BannerAdApter {
 
     @Override
     public void show(Activity context) {
-
+        Log.d(Constants.TAG, "banner广告加载成功");
+        bannerContainer = AdContainer.generateBannerViewContainer((Activity) context, AdContainer.POS_BOTTOM);
+        bannerContainer.addView(bannerAd);
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.hi.ad.admob;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import com.google.android.gms.ads.AdError;
@@ -18,7 +19,7 @@ import com.hi.base.utils.Constants;
 /**
  * Admob 插屏广告实现类
  */
-public abstract class AdmobInterstitialAd extends InterstitialAdAdapter {
+public  class AdmobInterstitialAd extends InterstitialAdAdapter {
 
     private volatile boolean loading = false;
     private volatile boolean ready = false;
@@ -32,17 +33,63 @@ public abstract class AdmobInterstitialAd extends InterstitialAdAdapter {
         this.pluginParams = params;
         this.loading = false;
         this.ready = false;
-        if (params.contains("interstitial_pos_id")){
-            InterstitialAdId= params.getString("interstitial_pos_id");
+        if (params.contains("inters_pos_id")){
+            InterstitialAdId= params.getString("inters_pos_id");
         }
     }
+
+    @Override
+    public void onCreate(Activity activity) {
+
+    }
+
+    @Override
+    public void onStart() {
+
+    }
+
+    @Override
+    public void onStop() {
+
+    }
+
+    @Override
+    public void onRestart() {
+
+    }
+
+    @Override
+    public void onResume() {
+
+    }
+
+    @Override
+    public void onPause() {
+
+    }
+
+    @Override
+    public void onDestroy() {
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+    }
+
+    @Override
+    public void onNewIntent(Intent intent) {
+
+    }
+
     @Override
     public boolean isReady() {
         return ready;
     }
     @Override
     public void load(Activity context, String posId) {
-
+       posId=InterstitialAdId;
         if (loading) {
             if (adListener != null) {
                 adListener.onLoadFailed(Constants.CODE_LOAD_FAILED, "An ad is already loading");
@@ -62,7 +109,7 @@ public abstract class AdmobInterstitialAd extends InterstitialAdAdapter {
         loading = true;
         ready = false;
         AdRequest adRequest = new AdRequest.Builder().build();
-        InterstitialAd.load(context, InterstitialAdId, adRequest,
+        InterstitialAd.load(context, posId, adRequest,
                 new InterstitialAdLoadCallback() {
                     @Override
                     public void onAdLoaded(InterstitialAd interstitialAd) {
@@ -92,7 +139,6 @@ public abstract class AdmobInterstitialAd extends InterstitialAdAdapter {
 
     @Override
     public void show(Activity context) {
-
         if (mInterstitialAd == null) {
             Log.e(Constants.TAG, "AdmobInterstitialAd show failed. mInterstitialAd is null");
             if (adListener != null) {

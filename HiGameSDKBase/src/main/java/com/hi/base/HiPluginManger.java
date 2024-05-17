@@ -77,9 +77,7 @@ public class HiPluginManger {
                 if(parsed != null) {
                     result.add(parsed);
                 }
-
             }
-
         } catch (JSONException e) {
             e.printStackTrace();
         }

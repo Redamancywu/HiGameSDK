@@ -4,7 +4,6 @@
     "name": "GooglePay",
     "class": "com.hi.pay.GooglePay",
     "params": {
-
       "productInapp": "iap.big_handful_dia",
       "productSub": "iap.test,vip_monthly,vip_yearly,jm.weekly_vip,ias.weekly_vip,vip_1week,iap.svip7day"
     }
@@ -14,10 +13,25 @@
     "name": "admob",
     "class": "com.hi.ad.admob.AdmobAd",
     "params": {
-      "banner_pos_id": "ca-app-pub-2382347120869101/1444890093",
-      "interstitial_pos_id": "ca-app-pub-2382347120869101/4630096608",
-      "VIDEO_POS_ID": "65eb22f6296f9c7b",
-      "NATIVE_INTERS_POS_ID": "2069498c36103150"
-    }
+      "application.id": "ca-app-pub-2382347120869101~2642437601"
+    },
+    "children": [
+      {
+        "type": "banner",
+        "name": "banner",
+        "class": "com.hi.ad.admob.AdmobBannerAd",
+        "params": {
+          "banner_pos_id": "ca-app-pub-2382347120869101/1444890093"
+        }
+      },
+      {
+        "type": "inters",
+        "name": "inters",
+        "class": "com.hi.ad.admob.AdmobInterstitialAd",
+        "params": {
+          "inters_pos_id": "ca-app-pub-2382347120869101/4630096608"
+        }
+      }
+    ]
   }
 ]

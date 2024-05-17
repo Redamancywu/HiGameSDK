@@ -6,6 +6,7 @@ import android.util.Log;
 import com.hi.base.plugin.PluginInfo;
 import com.hi.base.plugin.ad.IAd;
 import com.hi.base.plugin.ad.IAdInitializationListener;
+import com.hi.base.plugin.ad.banner.BannerAdManager;
 import com.hi.base.utils.Constants;
 import java.util.List;
 
