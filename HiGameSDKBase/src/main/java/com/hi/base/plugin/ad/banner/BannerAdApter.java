@@ -4,7 +4,7 @@ import com.hi.base.plugin.ad.AdSize;
 import com.hi.base.plugin.ad.IAdListener;
 
 public abstract class BannerAdApter implements BannerAdListener {
-    protected IAdListener BannerAdListener;
+    protected IBannerListener BannerAdListener;
     protected AdSize adSize;
 
     @Override

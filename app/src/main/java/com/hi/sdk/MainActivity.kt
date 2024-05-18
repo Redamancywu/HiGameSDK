@@ -49,13 +49,14 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+
     private fun GoogleLogin() {
       //  TODO("Not yet implemented")
     }
 
     private fun BannerAd() {
       //  TODO("Not yet implemented")
-        HiGameSDK.getInstance().showBanner(this,"ca-app-pub-2382347120869101/1444890093")
+        HiGameSDK.getInstance().showBanner(this,"ca-app-pub-2382347120869101/4630096608")
     }
 
     private fun IntervalAd() {

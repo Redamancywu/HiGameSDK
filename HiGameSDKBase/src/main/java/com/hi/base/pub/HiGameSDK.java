@@ -24,6 +24,16 @@ public class HiGameSDK {
         }
         return instance;
     }
+    ///生命周期方法
+    public void onCreate(Context context){
+        SDKManager.getInstance().onCreate((Activity) context);
+    }
+    public void onResume(){
+        SDKManager.getInstance().onResume();
+    }
+    public void onPause(){
+        SDKManager.getInstance().onPause();
+    }
     public void init(Context context,IInitCallback initCallback){
         this.InitCallback=initCallback;
         SDKManager.getInstance().initSDK(context, new IInitCallback() {
@@ -79,7 +89,9 @@ public class HiGameSDK {
     public void showBanner(Context context,String posId){
         SDKManager.getInstance().showBannerAd(context, posId);
     }
+
     public void showInterstitial(Activity context,String posId){
         SDKManager.getInstance().showInterstitialAd(context, posId);
     }
+
 }

@@ -8,7 +8,6 @@ import android.util.Log;
 
 import com.hi.base.manger.HiAdManager;
 
-import com.hi.base.manger.HiLoginManager;
 import com.hi.base.manger.HiAnalyticsManager;
 import com.hi.base.manger.HiPayManager;
 import com.hi.base.plugin.HiGameConfig;
@@ -16,7 +15,6 @@ import com.hi.base.plugin.IPlugin;
 import com.hi.base.plugin.PluginInfo;
 import com.hi.base.plugin.ad.IAd;
 import com.hi.base.plugin.analytics.IAnalytics;
-import com.hi.base.plugin.itf.ILogin;
 import com.hi.base.plugin.itf.IPay;
 import com.hi.base.utils.ApkHelper;
 import com.hi.base.utils.ClassUtils;
@@ -50,9 +48,6 @@ public class HiPluginManger {
             Log.d(Constants.TAG, "begin to register a new plugin type:" + pluginInfo.getType() + "; class:" + pluginInfo.getClazz());
             if (IPay.type.equals(pluginInfo.getType())){
                 HiPayManager.getInstance().InitPay((Activity) context,pluginInfo);
-            }
-            if (ILogin.type.equals(pluginInfo.getType())){
-                HiLoginManager.getInstance().InitLoginPlugin((Activity) context,pluginInfo);
             }
             if (IAd.type.equals(pluginInfo.getType())){
                 HiAdManager.getInstance().initPlugin((Activity) context,pluginInfo);

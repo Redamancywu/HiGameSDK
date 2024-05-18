@@ -2,6 +2,7 @@ package com.hi.base.pub;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.util.Log;
 import android.view.ViewGroup;
@@ -11,7 +12,9 @@ import com.hi.base.manger.HiAdManager;
 import com.hi.base.manger.HiPayManager;
 import com.hi.base.model.HiAdType;
 import com.hi.base.plugin.HiGameConfig;
+import com.hi.base.plugin.ad.AdApter;
 import com.hi.base.plugin.ad.AdContainer;
+import com.hi.base.plugin.ad.AdSize;
 import com.hi.base.plugin.ad.banner.BannerAdManager;
 import com.hi.base.plugin.ad.banner.IBannerListener;
 import com.hi.base.plugin.ad.inters.IInterstitialAdListener;
@@ -20,6 +23,8 @@ import com.hi.base.plugin.itf.IInitCallback;
 import com.hi.base.plugin.pay.IPayCallBack;
 import com.hi.base.plugin.pay.PayParams;
 import com.hi.base.utils.Constants;
+
+import java.security.PublicKey;
 
 public class SDKManager {
     private static SDKManager instance;
@@ -55,6 +60,7 @@ public class SDKManager {
     public void showBannerAd(Context context, String posId) {
         //显示banner广告
         BannerAdManager bannerAd = new BannerAdManager(context,posId);
+        bannerAd.setAdSize(AdSize.BANNER_SIZE);
         bannerAd.setAdListener(new IBannerListener() {
             @Override
             public void onFailed(int code, String msg) {
@@ -69,9 +75,11 @@ public class SDKManager {
             @Override
             public void onLoaded() {
                 Log.d(Constants.TAG, "banner广告加载成功");
-                bannerContainer = AdContainer.generateBannerViewContainer((Activity) context, AdContainer.POS_BOTTOM);
-                bannerContainer.addView(bannerAd.getBannerView());
-                bannerAd.show();
+                Log.d(Constants.TAG, "banner广告加载:"+bannerAd.isReady());
+                if (bannerAd.isReady()){
+                    bannerContainer=AdContainer.generateBannerViewContainer((Activity) context,AdContainer.POS_BOTTOM);
+                    bannerContainer.addView(bannerAd.getBannerView());
+                }
             }
 
             @Override
@@ -99,7 +107,6 @@ public class SDKManager {
     }
 
     public void showInterstitialAd(Activity context, String posId) {
-        HiGameConfig config = new HiGameConfig();
         InterstitialAdManager inters = new InterstitialAdManager(context,posId);
         inters.setAdListener(new IInterstitialAdListener() {
             @Override
@@ -109,7 +116,6 @@ public class SDKManager {
 
             @Override
             public void onLoadFailed(int code, String msg) {
-
                 Log.d(Constants.TAG, "插屏广告加载失败");
             }
 
@@ -146,6 +152,33 @@ public class SDKManager {
             }
         });
         inters.load(context);
+    }
+    public void onCreate(Activity activity){
+        HiPluginManger.getInstance().onCreate(activity);
+    }
+    public void onRestart(){
+        HiPluginManger.getInstance().onRestart();
+    }
+    public void onStart(){
+        HiPluginManger.getInstance().onStart();
+    }
+    public void onResume(){
+        HiPluginManger.getInstance().onResume();
+    }
+    public void onPause(){
+        HiPluginManger.getInstance().onPause();
+    }
+    public void onStop(){
+        HiPluginManger.getInstance().onStop();
+    }
+    public void onDestroy(){
+        HiPluginManger.getInstance().onDestroy();
+    }
+    public void onNewIntent(Intent intent){
+        HiPluginManger.getInstance().onNewIntent(intent);
+    }
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        HiPluginManger.getInstance().onActivityResult(requestCode,resultCode,data);
     }
 
 
