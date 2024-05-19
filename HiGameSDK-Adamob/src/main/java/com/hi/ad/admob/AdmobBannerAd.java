@@ -18,6 +18,7 @@ import com.hi.base.plugin.ad.AdContainer;
 import com.hi.base.plugin.ad.banner.BannerAdApter;
 import com.hi.base.plugin.ad.banner.IBannerListener;
 import com.hi.base.utils.Constants;
+
 public class AdmobBannerAd extends BannerAdApter {
     private volatile boolean loading = false;
     private volatile boolean ready = false;
@@ -25,6 +26,7 @@ public class AdmobBannerAd extends BannerAdApter {
     private AdView bannerAd;
     private HiGameConfig config;
     private String bannerPosId;
+    private ViewGroup bannerContainer;
 
     @Override
     public void init(Context context, HiGameConfig config) {
@@ -34,33 +36,6 @@ public class AdmobBannerAd extends BannerAdApter {
             bannerPosId = config.getString("banner_pos_id");
         }
     }
-
-    @Override
-    public void onCreate(Activity activity) { }
-
-    @Override
-    public void onStart() { }
-
-    @Override
-    public void onStop() { }
-
-    @Override
-    public void onRestart() { }
-
-    @Override
-    public void onResume() { }
-
-    @Override
-    public void onPause() { }
-
-    @Override
-    public void onDestroy() { }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) { }
-
-    @Override
-    public void onNewIntent(Intent intent) { }
 
     @Override
     public boolean isReady() {
@@ -83,11 +58,7 @@ public class AdmobBannerAd extends BannerAdApter {
         ready = false;
 
         bannerAd = new AdView(context);
-        if (adSize != null) {
-            bannerAd.setAdSize(new AdSize(adSize.getWidth(), adSize.getHeight()));
-        } else {
-            bannerAd.setAdSize(AdSize.BANNER);
-        }
+        bannerAd.setAdSize(AdSize.BANNER);
         bannerAd.setAdUnitId(posId); // 使用本地广告单元 ID
 
         bannerAd.setAdListener(new AdListener() {
@@ -137,8 +108,13 @@ public class AdmobBannerAd extends BannerAdApter {
         bannerAd.loadAd(adRequest);
     }
 
+
     @Override
-    public void show(Activity context) { }
+    public void show(Activity context) {
+        super.show(context);
+        bannerContainer = AdContainer.generateBannerViewContainer((Activity) context, AdContainer.POS_BOTTOM);
+        bannerContainer.addView(getBannerView());
+    }
 
     @Override
     public View getBannerView() {

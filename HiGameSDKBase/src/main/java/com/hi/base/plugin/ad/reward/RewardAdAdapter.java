@@ -1,4 +1,4 @@
-package com.hi.base.plugin.ad.inters;
+package com.hi.base.plugin.ad.reward;
 
 import android.app.Activity;
 import android.content.Context;
@@ -6,10 +6,11 @@ import android.content.Intent;
 
 import com.hi.base.plugin.HiGameConfig;
 
-public  class InterstitialAdAdapter implements IInterstitialAd {
-    protected IInterstitialAdListener adListener;
+public  class RewardAdAdapter implements IRewardAd {
 
-    public void setAdListener(IInterstitialAdListener adListener) {
+    protected IRewardAdListener adListener;
+
+    public void setAdListener(IRewardAdListener adListener) {
         this.adListener = adListener;
     }
 

@@ -1,4 +1,4 @@
-package com.hi.base.plugin.ad.inters;
+package com.hi.base.plugin.ad.splash;
 
 import android.app.Activity;
 import android.content.Context;
@@ -6,10 +6,11 @@ import android.content.Intent;
 
 import com.hi.base.plugin.HiGameConfig;
 
-public  class InterstitialAdAdapter implements IInterstitialAd {
-    protected IInterstitialAdListener adListener;
+public  class SplashAdAdapter implements ISplashAd {
 
-    public void setAdListener(IInterstitialAdListener adListener) {
+    protected ISplashAdListener adListener;
+
+    public void setAdListener(ISplashAdListener adListener) {
         this.adListener = adListener;
     }
 

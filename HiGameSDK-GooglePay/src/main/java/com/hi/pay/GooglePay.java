@@ -68,11 +68,6 @@ public class GooglePay extends IGooglePay {
     }
 
     @Override
-    public void onNewIntent(Intent intent) {
-
-    }
-
-    @Override
     public void Pay(Activity activity, PayParams params, IPayCallBack callback) {
         if (googleClient.isGooglePlayServiceAvailable(mcontext)) {
             PurchasesPay.getInstance().pay(activity, params, new IPayCallBack() {
@@ -92,5 +87,10 @@ public class GooglePay extends IGooglePay {
                 }
             });
         }
+    }
+
+    @Override
+    public void queryProducts() {
+        super.queryProducts();
     }
 }

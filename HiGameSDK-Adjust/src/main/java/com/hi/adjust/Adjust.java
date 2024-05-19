@@ -16,12 +16,13 @@ import com.hi.base.data.HiOrder;
 import com.hi.base.data.HiRoleData;
 import com.hi.base.plugin.HiGameConfig;
 import com.hi.base.plugin.analytics.IAnalytics;
+import com.hi.base.plugin.analytics.IBaseAnalytics;
 import com.hi.base.utils.Constants;
 import com.hi.base.utils.DeviceUtils;
 
 import java.util.Map;
 
-public class Adjust implements IAnalytics {
+public class Adjust extends IBaseAnalytics {
     @Override
     public void init(Context context, HiGameConfig config) {
         String appToken = config.getString("app.token");    //应用识别码
@@ -61,53 +62,6 @@ public class Adjust implements IAnalytics {
 
         com.adjust.sdk.Adjust.onCreate(adjustConfig);
     }
-
-    @Override
-    public void onCreate(Activity activity) {
-
-    }
-
-    @Override
-    public void onStart() {
-
-    }
-
-    @Override
-    public void onStop() {
-
-    }
-
-    @Override
-    public void onRestart() {
-
-    }
-
-    @Override
-    public void onResume() {
-
-    }
-
-    @Override
-    public void onPause() {
-
-    }
-
-    @Override
-    public void onDestroy() {
-
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-    }
-
-    @Override
-    public void onNewIntent(Intent intent) {
-
-    }
-
-
     @Override
     public void onInitBegin() {
         onCustomEvent(SDK_KEY_INIT_BEGIN, null);
@@ -140,7 +94,7 @@ public class Adjust implements IAnalytics {
 
     @Override
     public void onPurchase(HiOrder order) {
-
+        super.onPurchase(order);
     }
 
     @Override
@@ -160,7 +114,7 @@ public class Adjust implements IAnalytics {
 
     @Override
     public void onCompleteTutorial(int tutorialID, String content) {
-
+        super.onCompleteTutorial(tutorialID, content);
     }
 
     @Override

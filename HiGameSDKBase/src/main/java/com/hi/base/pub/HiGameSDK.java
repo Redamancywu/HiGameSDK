@@ -4,6 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
+import com.hi.base.HiGameListener;
+import com.hi.base.data.HiOrder;
+import com.hi.base.data.HiProduct;
+import com.hi.base.data.HiUser;
 import com.hi.base.manger.HiAdManager;
 import com.hi.base.model.HiAdType;
 import com.hi.base.plugin.HiGameConfig;
@@ -13,9 +17,11 @@ import com.hi.base.plugin.pay.IPayCallBack;
 import com.hi.base.plugin.pay.PayParams;
 import com.hi.base.utils.Constants;
 
+import java.util.List;
+
 public class HiGameSDK {
     private static HiGameSDK instance;
-    private IInitCallback InitCallback;
+    private HiGameListener InitCallback;
     private IPayCallBack payCallBack;
 
     public static HiGameSDK getInstance() {
@@ -34,18 +40,59 @@ public class HiGameSDK {
     public void onPause(){
         SDKManager.getInstance().onPause();
     }
-    public void init(Context context,IInitCallback initCallback){
-        this.InitCallback=initCallback;
-        SDKManager.getInstance().initSDK(context, new IInitCallback() {
+    public void init(Context context, HiGameListener listener){
+        this.InitCallback=listener;
+        SDKManager.getInstance().initSDK(context, new HiGameListener() {
             @Override
-            public void onInitSuccess() {
-                initCallback.onInitSuccess();
+            public void onInitFailed(int code, String msg) {
+                listener.onInitFailed(code,msg);
             }
 
             @Override
-            public void onInitFail(int code, String msg) {
-                initCallback.onInitFail(code,msg);
+            public void onInitSuccess() {
+                listener.onInitSuccess();
             }
+
+            @Override
+            public void onLogout() {
+                listener.onLogout();
+            }
+
+            @Override
+            public void onLoginSuccess(HiUser user) {
+                listener.onLoginSuccess(user);
+            }
+
+            @Override
+            public void onLoginFailed(int code, String msg) {
+                listener.onLoginFailed(code,msg);
+            }
+
+            @Override
+            public void onUpgradeSuccess(HiUser user) {
+                listener.onUpgradeSuccess(user);
+            }
+
+            @Override
+            public void onProductsResult(int code, List<HiProduct> products) {
+                listener.onProductsResult(code,products);
+            }
+
+            @Override
+            public void onPaySuccess(HiOrder order) {
+                listener.onPaySuccess(order);
+            }
+
+            @Override
+            public void onPayFailed(int code, String msg) {
+                listener.onPayFailed(code,msg);
+            }
+
+            @Override
+            public void onExitSuccess() {
+                listener.onExitSuccess();
+            }
+
         });
     }
     public void Pay(Activity activity, PayParams params, IPayCallBack callBack){
@@ -81,7 +128,7 @@ public class HiGameSDK {
             @Override
             public void onInitFailed(int code, String msg) {
                 //初始化失败
-                InitCallback.onInitFail(code,msg);
+                InitCallback.onInitFailed(code,msg);
                 Log.d(Constants.TAG,"onInitFailed: "+code+"  "+msg);
             }
         });

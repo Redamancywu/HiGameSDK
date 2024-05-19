@@ -3,11 +3,14 @@ package com.hi.base.manger;
 import android.app.Activity;
 import android.text.TextUtils;
 import android.util.Log;
+
 import com.hi.base.plugin.PluginInfo;
 import com.hi.base.plugin.ad.IAd;
 import com.hi.base.plugin.ad.IAdInitializationListener;
 import com.hi.base.plugin.ad.banner.BannerAdManager;
+import com.hi.base.plugin.ad.inters.InterstitialAdManager;
 import com.hi.base.utils.Constants;
+
 import java.util.List;
 
 public class HiAdManager {
@@ -22,11 +25,14 @@ public class HiAdManager {
         }
         return instance;
     }
-    private HiAdManager(){
+
+    private HiAdManager() {
 
     }
+
     /**
      * 设置初始化回调
+     *
      * @param initializationListener
      */
     public void setInitializationListener(IAdInitializationListener initializationListener) {
@@ -39,7 +45,7 @@ public class HiAdManager {
             return;
         }
         try {
-            this.pluginInfo=pluginInfo;
+            this.pluginInfo = pluginInfo;
             adParentPlugin = (IAd) pluginInfo.getPlugin();
             adParentPlugin.setInitializationListener(new IAdInitializationListener() {
                 @Override
@@ -63,8 +69,10 @@ public class HiAdManager {
             e.printStackTrace();
         }
     }
+
     /**
      * 获取子插件
+     *
      * @param type
      * @return
      */
@@ -77,7 +85,7 @@ public class HiAdManager {
         }
         List<PluginInfo> children = this.pluginInfo.getChildren();
         Log.d(Constants.TAG, "children config:" + children);
-        if (children == null || children.size() ==0) {
+        if (children == null || children.size() == 0) {
             Log.e(Constants.TAG, "getChild failed. no children config");
             return null;
         }

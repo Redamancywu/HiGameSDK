@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.util.Log;
 import android.view.ViewGroup;
 
+import com.hi.base.HiGameListener;
 import com.hi.base.HiPluginManger;
 import com.hi.base.manger.HiAdManager;
 import com.hi.base.manger.HiPayManager;
@@ -28,6 +29,7 @@ import java.security.PublicKey;
 
 public class SDKManager {
     private static SDKManager instance;
+    private HiGameListener listener;
 
     public static SDKManager getInstance() {
         if (instance == null) {
@@ -38,15 +40,17 @@ public class SDKManager {
 
     private ViewGroup bannerContainer;
 
-    public void initSDK(Context context, IInitCallback callback) {
+    public void initSDK(Context context, HiGameListener listener) {
+        this.listener = listener;
         //初始化SDK
         boolean isSuccessful = true;//默认初始化成功
         if (isSuccessful) {
-            callback.onInitSuccess();
             HiPluginManger.getInstance().InitPlugin(context);
+            listener.onInitSuccess();
         } else {
-            callback.onInitFail(404, "初始化失败");
             Log.e(Constants.TAG, "SDKManager 初始化失败");
+
+            listener.onInitFailed(404, "初始化失败");
 
         }
     }
@@ -59,7 +63,7 @@ public class SDKManager {
 
     public void showBannerAd(Context context, String posId) {
         //显示banner广告
-        BannerAdManager bannerAd = new BannerAdManager(context,posId);
+        BannerAdManager bannerAd = new BannerAdManager(context, posId);
         bannerAd.setAdSize(AdSize.BANNER_SIZE);
         bannerAd.setAdListener(new IBannerListener() {
             @Override
@@ -75,10 +79,11 @@ public class SDKManager {
             @Override
             public void onLoaded() {
                 Log.d(Constants.TAG, "banner广告加载成功");
-                Log.d(Constants.TAG, "banner广告加载:"+bannerAd.isReady());
-                if (bannerAd.isReady()){
-                    bannerContainer=AdContainer.generateBannerViewContainer((Activity) context,AdContainer.POS_BOTTOM);
+                Log.d(Constants.TAG, "banner广告加载:" + bannerAd.isReady());
+                if (bannerAd.isReady()) {
+                    bannerContainer = AdContainer.generateBannerViewContainer((Activity) context, AdContainer.POS_BOTTOM);
                     bannerContainer.addView(bannerAd.getBannerView());
+
                 }
             }
 
@@ -107,7 +112,7 @@ public class SDKManager {
     }
 
     public void showInterstitialAd(Activity context, String posId) {
-        InterstitialAdManager inters = new InterstitialAdManager(context,posId);
+        InterstitialAdManager inters = new InterstitialAdManager(context, posId);
         inters.setAdListener(new IInterstitialAdListener() {
             @Override
             public void onFailed(int code, String msg) {
@@ -153,34 +158,42 @@ public class SDKManager {
         });
         inters.load(context);
     }
-    public void onCreate(Activity activity){
+
+    public void onCreate(Activity activity) {
         HiPluginManger.getInstance().onCreate(activity);
     }
-    public void onRestart(){
+
+    public void onRestart() {
         HiPluginManger.getInstance().onRestart();
     }
-    public void onStart(){
+
+    public void onStart() {
         HiPluginManger.getInstance().onStart();
     }
-    public void onResume(){
+
+    public void onResume() {
         HiPluginManger.getInstance().onResume();
     }
-    public void onPause(){
+
+    public void onPause() {
         HiPluginManger.getInstance().onPause();
     }
-    public void onStop(){
+
+    public void onStop() {
         HiPluginManger.getInstance().onStop();
     }
-    public void onDestroy(){
+
+    public void onDestroy() {
         HiPluginManger.getInstance().onDestroy();
     }
-    public void onNewIntent(Intent intent){
+
+    public void onNewIntent(Intent intent) {
         HiPluginManger.getInstance().onNewIntent(intent);
     }
-    public void onActivityResult(int requestCode, int resultCode, Intent data){
-        HiPluginManger.getInstance().onActivityResult(requestCode,resultCode,data);
-    }
 
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        HiPluginManger.getInstance().onActivityResult(requestCode, resultCode, data);
+    }
 
 
 }

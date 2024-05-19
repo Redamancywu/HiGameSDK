@@ -6,6 +6,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.hi.base.HiGameListener
+import com.hi.base.data.HiOrder
+import com.hi.base.data.HiProduct
+import com.hi.base.data.HiUser
 import com.hi.base.plugin.itf.IInitCallback
 import com.hi.base.plugin.pay.IPayCallBack
 import com.hi.base.plugin.pay.PayParams
@@ -27,26 +31,63 @@ class MainActivity : AppCompatActivity() {
                 insets
             }
         }
-
+        HiGameSDK.getInstance().onCreate(this)
         HiGameSDK.getInstance().init(this, object :
-            IInitCallback {
-           override fun onInitSuccess() {
+            HiGameListener {
+            override fun onInitFailed(code: Int, msg: String?) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onInitSuccess() {
                Log.d(TAG,"onInitSuccess")
               // TODO("Not yet implemented")
            }
 
-           override fun onInitFail(code: Int, msg: String?) {
-             //  TODO("Not yet implemented")
-               Log.d(TAG,"onInitFail code:$code msg:$msg")
-           }
+            override fun onLogout() {
+                TODO("Not yet implemented")
+            }
 
-       })
+            override fun onLoginSuccess(user: HiUser?) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onLoginFailed(code: Int, msg: String?) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onUpgradeSuccess(user: HiUser?) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onProductsResult(code: Int, products: MutableList<HiProduct>?) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onPaySuccess(order: HiOrder?) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onPayFailed(code: Int, msg: String?) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onExitSuccess() {
+                TODO("Not yet implemented")
+            }
+
+
+        })
         HiGameSDK.getInstance().setAdInitSDK();
         bindings!!.button.setOnClickListener { GooglePay("123456789") }
-        bindings!!.button2.setOnClickListener { BannerAd()  }
+        bindings!!.button2.setOnClickListener { showBannerAd()  }
         bindings!!.button3.setOnClickListener { IntervalAd()   }
         bindings!!.bthLoginGoogle.setOnClickListener { GoogleLogin() }
 
+    }
+
+    private fun showBannerAd() {
+      //  TODO("Not yet implemented")
+        HiGameSDK.getInstance().showBanner(this,"ca-app-pub-2382347120869101/4630096608")
     }
 
 
@@ -54,10 +95,6 @@ class MainActivity : AppCompatActivity() {
       //  TODO("Not yet implemented")
     }
 
-    private fun BannerAd() {
-      //  TODO("Not yet implemented")
-        HiGameSDK.getInstance().showBanner(this,"ca-app-pub-2382347120869101/4630096608")
-    }
 
     private fun IntervalAd() {
        // TODO("Not yet implemented")

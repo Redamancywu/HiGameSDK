@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Context;
 
 import com.hi.base.data.HiUser;
-import com.hi.base.plugin.login.ILoginComponent;
 import com.hi.base.store.UserStore;
 import com.hi.base.utils.Constants;
 import com.hi.login.facebook.FacebookLogin;

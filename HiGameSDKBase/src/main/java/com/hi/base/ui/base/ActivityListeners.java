@@ -17,15 +17,15 @@ public class ActivityListeners {
         listeners = new ArrayList<>();
     }
 
-    public void     addListener(IActivityListener lifeCycle) {
-        if(!listeners.contains(lifeCycle)) {
+    public void addListener(IActivityListener lifeCycle) {
+        if (!listeners.contains(lifeCycle)) {
             listeners.add(lifeCycle);
         }
     }
 
 
     public void removeListener(IActivityListener lifeCycle) {
-        if(listeners.contains(lifeCycle)) {
+        if (listeners.contains(lifeCycle)) {
             listeners.remove(lifeCycle);
         }
     }

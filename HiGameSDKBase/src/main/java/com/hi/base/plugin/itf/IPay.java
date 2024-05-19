@@ -9,5 +9,9 @@ import com.hi.base.plugin.pay.PayParams;
 public interface IPay extends IPlugin {
     String type="pay";
     void Pay(Activity activity,PayParams params, IPayCallBack callback);
+    void querySubStatus();
+    void queryProducts();
+    String getAllSubInfo();
+    String getProductInfo();
 
 }
