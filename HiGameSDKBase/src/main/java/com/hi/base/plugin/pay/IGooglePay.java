@@ -1,4 +1,4 @@
-package com.hi.base.plugin.itf.base;
+package com.hi.base.plugin.pay;
 
 import android.app.Activity;
 import android.content.Context;

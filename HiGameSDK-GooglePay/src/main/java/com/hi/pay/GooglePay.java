@@ -2,7 +2,6 @@ package com.hi.pay;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -14,7 +13,7 @@ import com.android.billingclient.api.BillingResult;
 import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.hi.base.plugin.HiGameConfig;
-import com.hi.base.plugin.itf.base.IGooglePay;
+import com.hi.base.plugin.pay.IGooglePay;
 import com.hi.base.plugin.pay.IPayCallBack;
 import com.hi.base.plugin.pay.PayParams;
 import com.hi.base.utils.Constants;
