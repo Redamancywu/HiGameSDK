@@ -69,7 +69,7 @@ public class SDKManager {
         Log.d(Constants.TAG,"Open Login UI");
         context.startActivity(intent);
     }
-
+    private IBannerListener bannerListener;
     public void showBannerAd(Context context, String posId) {
         //显示banner广告
         BannerAdManager bannerAd = new BannerAdManager(context, posId);
@@ -83,6 +83,7 @@ public class SDKManager {
             @Override
             public void onLoadFailed(int code, String msg) {
                 Log.e(Constants.TAG, "banner广告加载失败");
+                bannerAd.load(context);
             }
 
             @Override
@@ -110,6 +111,7 @@ public class SDKManager {
             @Override
             public void onClosed() {
                 Log.d(Constants.TAG, "banner广告关闭");
+                bannerAd.load(context);
             }
 
             @Override
@@ -131,6 +133,7 @@ public class SDKManager {
             @Override
             public void onLoadFailed(int code, String msg) {
                 Log.d(Constants.TAG, "插屏广告加载失败");
+                inters.load(context);
             }
 
             @Override
@@ -155,8 +158,8 @@ public class SDKManager {
 
             @Override
             public void onClosed() {
-
                 Log.d(Constants.TAG, "插屏广告关闭");
+                inters.load(context);
             }
 
             @Override

@@ -10,6 +10,7 @@ import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.appopen.AppOpenAd;
 import com.hi.base.plugin.HiGameConfig;
+import com.hi.base.plugin.ad.splash.ISplashAdListener;
 import com.hi.base.plugin.ad.splash.SplashAdAdapter;
 import com.hi.base.utils.Constants;
 
@@ -25,7 +26,7 @@ public class AdmobSplashAd extends SplashAdAdapter {
     private AppOpenAd mSplashAd;
     private HiGameConfig pluginParams;                      //插件参数
     private String SplashAdId;                                //开屏广告位ID
-
+    private ISplashAdListener splashAdListener;
     @Override
     public void init(Context context, HiGameConfig config) {
         this.pluginParams = config;
@@ -34,6 +35,12 @@ public class AdmobSplashAd extends SplashAdAdapter {
         if (config.contains("splash_pos_id")){
             SplashAdId=config.getString("splash_pos_id");
         }
+    }
+
+    @Override
+    public void setAdListener(ISplashAdListener adListener) {
+        super.setAdListener(adListener);
+        splashAdListener=adListener;
     }
 
     @Override

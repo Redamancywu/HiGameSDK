@@ -12,6 +12,7 @@ import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.hi.base.plugin.HiGameConfig;
+import com.hi.base.plugin.ad.inters.IInterstitialAdListener;
 import com.hi.base.plugin.ad.inters.InterstitialAdAdapter;
 import com.hi.base.utils.Constants;
 
@@ -23,7 +24,7 @@ public  class AdmobInterstitialAd extends InterstitialAdAdapter {
 
     private volatile boolean loading = false;
     private volatile boolean ready = false;
-
+    private IInterstitialAdListener interstitialAdListener;
     private InterstitialAd mInterstitialAd;
     private HiGameConfig pluginParams;                      //插件参数
     private String InterstitialAdId;                       //插屏广告位ID
@@ -41,6 +42,13 @@ public  class AdmobInterstitialAd extends InterstitialAdAdapter {
     public boolean isReady() {
         return ready;
     }
+
+    @Override
+    public void setAdListener(IInterstitialAdListener adListener) {
+        super.setAdListener(adListener);
+        interstitialAdListener=adListener;
+    }
+
     @Override
     public void load(Activity context, String posId) {
        posId=InterstitialAdId;
@@ -49,14 +57,6 @@ public  class AdmobInterstitialAd extends InterstitialAdAdapter {
                 adListener.onLoadFailed(Constants.CODE_LOAD_FAILED, "An ad is already loading");
             }
             Log.w(Constants.TAG, "AdmobInterstitialAd is already loading. ignored");
-            return;
-        }
-
-        if (ready) {
-            Log.w(Constants.TAG, "AdmobInterstitialAd is already loaded. ignored");
-            if (adListener != null) {
-                adListener.onLoaded();
-            }
             return;
         }
         Log.d(Constants.TAG, "AdmobInterstitialAd load begin. posId:"+posId+";admob posId:" + posId);

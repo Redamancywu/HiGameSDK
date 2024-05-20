@@ -19,6 +19,11 @@ public  class BannerAdApter implements BannerAdListener {
     }
 
     @Override
+    public void close() {
+
+    }
+
+    @Override
     public void setAdSize(AdSize adSize) {
         this.adSize = adSize;
     }
@@ -97,4 +102,5 @@ public  class BannerAdApter implements BannerAdListener {
     public void show(Activity context) {
 
     }
+
 }

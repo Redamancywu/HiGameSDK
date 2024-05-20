@@ -17,8 +17,10 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url = uri("https://artifacts.applovin.com/android") }
     }
 }
+
 
 rootProject.name = "HiGameSDK"
 include(":app")
@@ -27,3 +29,4 @@ include(":HiGameSDK-GooglePay")
 include(":HiGameSDK-Login")
 include(":HiGameSDK-Adamob")
 include(":HiGameSDK-Adjust")
+include(":HiGameSDK-Max")

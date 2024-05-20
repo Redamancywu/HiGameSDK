@@ -13,6 +13,7 @@ import com.google.android.gms.ads.rewarded.RewardItem;
 import com.google.android.gms.ads.rewarded.RewardedAd;
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 import com.hi.base.plugin.HiGameConfig;
+import com.hi.base.plugin.ad.reward.IRewardAdListener;
 import com.hi.base.plugin.ad.reward.RewardAdAdapter;
 import com.hi.base.utils.Constants;
 
@@ -24,7 +25,7 @@ public class AdmobRewardAd extends RewardAdAdapter {
 
     private volatile boolean loading = false;
     private volatile boolean ready = false;
-
+    private IRewardAdListener rewardAdListener;
     private RewardedAd mRewardVideoAd;
     private HiGameConfig pluginParams;                      //插件参数
     private String RewardAdUnitId;                          //激励视频广告位ID
@@ -37,6 +38,12 @@ public class AdmobRewardAd extends RewardAdAdapter {
         if (config.contains("reward_pos_id")){
             RewardAdUnitId = config.getString("reward_pos_id");
         }
+    }
+
+    @Override
+    public void setAdListener(IRewardAdListener adListener) {
+        super.setAdListener(adListener);
+        rewardAdListener=adListener;
     }
 
     @Override

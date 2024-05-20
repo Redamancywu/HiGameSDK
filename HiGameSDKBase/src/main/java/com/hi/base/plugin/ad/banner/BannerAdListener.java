@@ -11,6 +11,7 @@ import com.hi.base.plugin.ad.IBaseAd;
 public interface BannerAdListener extends IBaseAd {
 
     View getBannerView();
+    void close();
 
     void setAdSize(AdSize adSize);
 

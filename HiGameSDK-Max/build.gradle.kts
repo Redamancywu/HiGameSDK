@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.hi.higamesdk_adamob"
+    namespace = "com.hi.ad"
     compileSdk = 34
 
     defaultConfig {
@@ -29,14 +29,21 @@ android {
 }
 
 dependencies {
-    implementation(project(":HiGameSDKBase"))
+
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    //Adamob
-    implementation ("com.google.android.gms:play-services-ads:23.1.0")
-
-
+    implementation(project(":HiGameSDKBase"))
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
+    implementation("com.applovin:applovin-sdk:12.4.0")
+    implementation("com.applovin.mediation:google-adapter:22.6.0.0")
+    implementation("com.applovin.mediation:facebook-adapter:6.16.0.2")
+    implementation("com.applovin.mediation:mintegral-adapter:16.6.11.0")
+    implementation("com.applovin.mediation:bytedance-adapter:5.7.0.2.0")
+    implementation("com.applovin.mediation:google-ad-manager-adapter:22.6.0.0")
+    implementation("com.applovin.mediation:smaato-adapter:22.5.1.0")
+    implementation("com.applovin.mediation:fyber-adapter:8.2.5.0")
 }

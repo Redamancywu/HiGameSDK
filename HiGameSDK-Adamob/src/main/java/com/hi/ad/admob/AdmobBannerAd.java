@@ -27,6 +27,7 @@ public class AdmobBannerAd extends BannerAdApter {
     private HiGameConfig config;
     private String bannerPosId;
     private ViewGroup bannerContainer;
+    private IBannerListener BannerAdListener;
 
     @Override
     public void init(Context context, HiGameConfig config) {
@@ -41,6 +42,7 @@ public class AdmobBannerAd extends BannerAdApter {
     public boolean isReady() {
         return ready;
     }
+
 
     @Override
     public void load(Activity context, String posId) {
@@ -112,12 +114,24 @@ public class AdmobBannerAd extends BannerAdApter {
     @Override
     public void show(Activity context) {
         super.show(context);
-        bannerContainer = AdContainer.generateBannerViewContainer((Activity) context, AdContainer.POS_BOTTOM);
-        bannerContainer.addView(getBannerView());
+        if (bannerAd!=null){
+            bannerContainer = AdContainer.generateBannerViewContainer((Activity) context, AdContainer.POS_BOTTOM);
+            bannerContainer.addView(getBannerView());
+            if (BannerAdListener != null){
+                BannerAdListener.onShow();
+            }
+        }
+
     }
 
     @Override
     public View getBannerView() {
         return bannerAd;
+    }
+
+    @Override
+    public void setAdListener(IBannerListener adListener) {
+        super.setAdListener(adListener);
+        BannerAdListener= adListener;
     }
 }
