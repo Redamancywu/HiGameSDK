@@ -1,14 +1,29 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("com.google.gms.google-services")
 }
 
 android {
-    namespace = "com.hi.sdk"
+    signingConfigs {
+        getByName("debug") {
+            storeFile = file("D:\\HiGameSDK\\app\\HiGame.jks")
+            storePassword = "240520"
+            keyAlias = "HiGame"
+            keyPassword = "240520"
+        }
+        create("release") {
+            storeFile = file("D:\\HiGameSDK\\app\\HiGame.jks")
+            storePassword = "240520"
+            keyAlias = "HiGame"
+            keyPassword = "240520"
+        }
+    }
+    namespace = "com.hi.sdkdemo"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.hi.sdk"
+        applicationId = "com.hi.sdkdemo"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -45,6 +60,7 @@ dependencies {
     implementation(project(":HiGameSDKBase"))
     implementation(project(":HiGameSDK-GooglePay"))
     implementation(project(":HiGameSDK-Adamob"))
+    implementation(project(":HiGameSDK-Login"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

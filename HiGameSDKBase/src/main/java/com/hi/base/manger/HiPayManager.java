@@ -1,6 +1,7 @@
 package com.hi.base.manger;
 
 import android.app.Activity;
+import android.content.Context;
 import android.util.Log;
 
 import com.hi.base.plugin.PluginInfo;

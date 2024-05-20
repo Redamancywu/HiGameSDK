@@ -3,8 +3,8 @@
 
     <application>
         <activity
-            android:name=".ui.login.LoginActivity"
-            android:exported="false" />
+            android:name="com.hi.base.ui.login.LoginActivity"
+            android:exported="true" />
     </application>
 
 </manifest>

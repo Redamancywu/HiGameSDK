@@ -9,6 +9,14 @@
     }
   },
   {
+    "type": "login",
+    "name": "Login",
+    "class": "com.hi.login.HiGameLogin",
+    "params": {
+      "google_client_id": "1:434805631021:android:699a09f0b065ff3484b0a4"
+    }
+  },
+  {
     "type": "ad",
     "name": "admob",
     "class": "com.hi.ad.admob.AdmobAd",

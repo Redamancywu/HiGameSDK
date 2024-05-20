@@ -3,21 +3,20 @@ package com.hi.base.manger;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 
+import com.hi.base.HiGameListener;
 import com.hi.base.data.HiUser;
-import com.hi.base.store.UserStore;
-import com.hi.base.utils.Constants;
-import com.hi.login.facebook.FacebookLogin;
-import com.hi.login.google.GoogleLogin;
-import com.hi.login.line.LineLogin;
-import com.hi.login.twiter.TwitterLogin;
-import com.hi.login.vistor.VisitorLogin;
+import com.hi.base.plugin.PluginInfo;
+import com.hi.base.plugin.login.ILogin;
+import com.hi.base.plugin.login.LoginType;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import com.hi.base.utils.Constants;
 
 public class HiLoginManager {
     private static HiLoginManager instance;
+    private ILogin login;
+    private HiGameListener listener;
 
     public static HiLoginManager getInstance() {
         if (instance==null){
@@ -26,17 +25,48 @@ public class HiLoginManager {
         return instance;
     }
 
+    public void setListener(HiGameListener listener) {
+        this.listener = listener;
+        if (login != null) {
+            login.setListener(listener);
+        }
+    }
     /**
-     * 当前选择的登陆类型， 初始值为上次登录的类型，如果上次没有，需要弹出界面选择
+     * 初始化插件
      */
-
-
-
+    public void initLogin(Activity activity, PluginInfo pluginInfo){
+        if (pluginInfo.getPlugin() == null) {
+            Log.w(Constants.TAG,"Plugin is not implemented for ILogin");
+            return;
+        }
+        try {
+            if (pluginInfo.getPlugin() instanceof ILogin) {
+                login = (ILogin) pluginInfo.getPlugin();
+                login.init(activity, pluginInfo.getGameConfig());
+                login.setListener(listener);
+            } else {
+                Log.w(Constants.TAG, "Plugin does not implement ILogin interface");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(Constants.TAG, "Error initializing login plugin: " + e.getMessage());
+        }
+    }
 
     /**
      * SDK登录入口
-     * @param context
+     * @param
      */
+    public void login(LoginType type) {
+        if (login == null) {
+            Log.d(Constants.TAG, "login is null");
+            return;
+        }
+        if (type == LoginType.GOOGLE) {
+            login.login(LoginType.GOOGLE);
+        }
+
+    }
 
 
 }

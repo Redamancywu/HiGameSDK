@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.hi.base.HiGameListener;
 import com.hi.base.HiPluginManger;
 import com.hi.base.manger.HiAdManager;
+import com.hi.base.manger.HiLoginManager;
 import com.hi.base.manger.HiPayManager;
 import com.hi.base.model.HiAdType;
 import com.hi.base.plugin.HiGameConfig;
@@ -23,6 +24,7 @@ import com.hi.base.plugin.ad.inters.InterstitialAdManager;
 import com.hi.base.plugin.itf.IInitCallback;
 import com.hi.base.plugin.pay.IPayCallBack;
 import com.hi.base.plugin.pay.PayParams;
+import com.hi.base.ui.login.LoginActivity;
 import com.hi.base.utils.Constants;
 
 import java.security.PublicKey;
@@ -40,18 +42,20 @@ public class SDKManager {
 
     private ViewGroup bannerContainer;
 
+
     public void initSDK(Context context, HiGameListener listener) {
         this.listener = listener;
         //初始化SDK
         boolean isSuccessful = true;//默认初始化成功
         if (isSuccessful) {
-            HiPluginManger.getInstance().InitPlugin(context);
+         //   HiPluginManger.getInstance().InitPlugin(context);
+
             listener.onInitSuccess();
+            HiLoginManager.getInstance().setListener(listener);
         } else {
             Log.e(Constants.TAG, "SDKManager 初始化失败");
 
             listener.onInitFailed(404, "初始化失败");
-
         }
     }
 
@@ -59,6 +63,11 @@ public class SDKManager {
         //google支付
         Log.i(Constants.TAG, "GooglePlayPay");
         HiPayManager.getInstance().Pay(activity, params, callBack);
+    }
+    public void Login(Context context){
+        Intent intent=new Intent(context, LoginActivity.class);
+        Log.d(Constants.TAG,"Open Login UI");
+        context.startActivity(intent);
     }
 
     public void showBannerAd(Context context, String posId) {

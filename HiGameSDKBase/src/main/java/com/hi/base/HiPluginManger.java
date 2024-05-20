@@ -9,6 +9,7 @@ import android.util.Log;
 import com.hi.base.manger.HiAdManager;
 
 import com.hi.base.manger.HiAnalyticsManager;
+import com.hi.base.manger.HiLoginManager;
 import com.hi.base.manger.HiPayManager;
 import com.hi.base.plugin.HiGameConfig;
 import com.hi.base.plugin.IPlugin;
@@ -16,6 +17,7 @@ import com.hi.base.plugin.PluginInfo;
 import com.hi.base.plugin.ad.IAd;
 import com.hi.base.plugin.analytics.IAnalytics;
 import com.hi.base.plugin.itf.IPay;
+import com.hi.base.plugin.login.ILogin;
 import com.hi.base.utils.ApkHelper;
 import com.hi.base.utils.ClassUtils;
 import com.hi.base.utils.Constants;
@@ -46,17 +48,30 @@ public class HiPluginManger {
               continue;
           }
             Log.d(Constants.TAG, "begin to register a new plugin type:" + pluginInfo.getType() + "; class:" + pluginInfo.getClazz());
-            if (IPay.type.equals(pluginInfo.getType())){
-                HiPayManager.getInstance().InitPay((Activity) context,pluginInfo);
-            }
+
             if (IAd.type.equals(pluginInfo.getType())){
-                HiAdManager.getInstance().initPlugin((Activity) context,pluginInfo);
+                HiAdManager.getInstance().initPlugin(context,pluginInfo);
             }
             if (IAnalytics.type.equals(pluginInfo.getType())){
                 HiAnalyticsManager.getInstance().registerPlugin(context,pluginInfo);
             }
         }
 
+    }
+    public void registerPlugin(Activity activity){
+        pluginInfos=loadFromFile(activity);
+        for(PluginInfo pluginInfo:pluginInfos) {
+            if (pluginInfo == null) {
+                Log.e(Constants.TAG, "plugin instance failed." + pluginInfo.getClazz());
+                continue;
+            }
+            if (IPay.type.equals(pluginInfo.getType())) {
+                HiPayManager.getInstance().InitPay(activity, pluginInfo);
+            }
+            if (ILogin.type.equals(pluginInfo.getType())){
+                HiLoginManager.getInstance().initLogin(activity,pluginInfo);
+            }
+        }
     }
     /**
      * 从assets下面ug_plugins.json中解析所有插件
@@ -152,6 +167,7 @@ public class HiPluginManger {
             continue;
           }
             pluginInfo.getPlugin().onCreate(activity);
+          registerPlugin(activity);
         }
     }
     public void onStart() {

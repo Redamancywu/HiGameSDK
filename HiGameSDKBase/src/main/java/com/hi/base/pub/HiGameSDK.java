@@ -95,6 +95,9 @@ public class HiGameSDK {
 
         });
     }
+    public void Login(Context context){
+        SDKManager.getInstance().Login(context);
+    }
     public void Pay(Activity activity, PayParams params, IPayCallBack callBack){
         this.payCallBack=callBack;
         SDKManager.getInstance().GooglePlayPay(activity, params, new IPayCallBack() {

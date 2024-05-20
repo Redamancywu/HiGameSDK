@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "434805631021",
+    "project_id": "higamesdk",
+    "storage_bucket": "higamesdk.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:434805631021:android:699a09f0b065ff3484b0a4",
+        "android_client_info": {
+          "package_name": "com.hi.sdkdemo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBD1DbrbWM2wv5v5_jwEwKFoM3wcakRz58"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

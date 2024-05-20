@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
-        android:name=".Application"
+        android:name="com.hi.base.app.HiGameApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -14,15 +14,21 @@
         android:theme="@style/Theme.HiGameSDK"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name="com.hi.base.ui.login.LoginActivity"
+            android:exported="true"
+            />
+        <activity
+            android:name="com.hi.sdk.MainActivity"
             android:screenOrientation="sensor"
             android:exported="true"
             tools:ignore="DiscouragedApi">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="ca-app-pub-2382347120869101~2642437601" />
     </application>

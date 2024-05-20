@@ -1,6 +1,7 @@
 package com.hi.base.manger;
 
 import android.app.Activity;
+import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -39,7 +40,7 @@ public class HiAdManager {
         this.initializationListener = initializationListener;
     }
 
-    public void initPlugin(Activity activity, PluginInfo pluginInfo) {
+    public void initPlugin(Context activity, PluginInfo pluginInfo) {
         if (pluginInfo.getPlugin() == null) {
             Log.e(Constants.TAG, "Ad plugin is null");
             return;

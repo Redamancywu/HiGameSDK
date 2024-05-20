@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
+import com.hi.base.HiGameListener;
 import com.hi.base.plugin.HiGameConfig;
 
 public class IBLogin implements ILogin{
@@ -58,7 +59,12 @@ public class IBLogin implements ILogin{
     }
 
     @Override
-    public void login() {
+    public void setListener(HiGameListener listener) {
+
+    }
+
+    @Override
+    public void login(LoginType Type) {
 
     }
 

@@ -1,4 +1,4 @@
-package com.hi.login;
+package com.hi.base.plugin.login;
 
 import java.lang.ref.PhantomReference;
 

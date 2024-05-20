@@ -33,8 +33,13 @@ public class GooglePay extends IGooglePay {
 
     @Override
     public void init(Context context, HiGameConfig config) {
-        mcontext = context;
-        mActivity = (Activity) context;
+        if (context instanceof Activity) {
+            mcontext = context;
+            mActivity = (Activity) context;
+        } else {
+            // 处理不是 Activity 实例的情况
+            Log.e(Constants.TAG, "Context is not an Activity instance");
+        }
         productId = config.getString("productId");
         subsId = config.getString("subsId");
         if (!TextUtils.isEmpty(productId)) {

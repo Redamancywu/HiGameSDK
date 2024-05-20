@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F8F8F8"
-    tools:context=".ui.login.LoginActivity">
+    tools:context="com.hi.base.ui.login.LoginActivity">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/login_card"
@@ -54,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:backgroundTint="#1877F2"
-                android:drawableStart="@drawable/Facebook"
+                android:drawableStart="@drawable/facebook"
                 android:drawablePadding="8dp"
                 android:text="LOGIN WITH FACEBOOK"
                 android:textColor="#FFF"

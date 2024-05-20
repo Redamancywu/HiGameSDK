@@ -44,6 +44,7 @@ public class ApplicationHolder {
             Log.d(Constants.TAG, "begin to load loal params.");
         //    GlobalConfig.getInstance().loadLocalParams(base);
           //  HttpClient.getInstance().init(true);
+            HiPluginManger.getInstance().InitPlugin(app);
 
            // Log.d(Constants.TAG, "curr sdk version:" + GlobalConfig.getInstance().getLocalSDKVersionName());
         }

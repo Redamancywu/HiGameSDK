@@ -6,19 +6,35 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+
+
+
+import com.hi.base.R;
+
+import com.hi.base.manger.HiLoginManager;
+import com.hi.base.plugin.login.LoginType;
 import com.hi.base.utils.Constants;
-import com.hi.higamesdk_login.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends Activity {
-   private static ActivityLoginBinding binding;
+    private View loginAsVisitorView, loginWithGoogleView, loginWithFacebookView, loginWithLine;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding=ActivityLoginBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-        setScreenOrientation(); // 动态设置屏幕方向
+        setContentView(R.layout.activity_login);
+//        activityLoginBinding = ActivityLoginBinding.inflate(getLayoutInflater());
+//        setContentView(activityLoginBinding.getRoot());
+        loginAsVisitorView = findViewById(R.id.login_as_visitor);
+        loginWithGoogleView = findViewById(R.id.login_with_google);
+        loginWithFacebookView = findViewById(R.id.login_with_facebook);
+        loginWithLine = findViewById(R.id.login_with_line);
+        if (loginAsVisitorView != null && loginWithGoogleView != null && loginWithFacebookView != null && loginWithLine != null) {
+            setScreenOrientation(); // 动态设置屏幕方向
+            setupClickListeners();
+        }
+
     }
+
     private void setScreenOrientation() {
         int screenOrientation = getScreenOrientationFromManifest();
         if (screenOrientation == ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE) {
@@ -30,6 +46,7 @@ public class LoginActivity extends Activity {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
         }
     }
+
     private int getScreenOrientationFromManifest() {
         try {
             ActivityInfo activityInfo = getPackageManager().getActivityInfo(getComponentName(), 0);
@@ -39,9 +56,41 @@ public class LoginActivity extends Activity {
         }
         return ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED; // 默认值
     }
-    public void onLoginClick(View view) {
-        switch (view.getId()){
 
-        }
+    private void setupClickListeners() {
+        loginWithGoogleView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HiLoginManager.getInstance().login(LoginType.GOOGLE);
+            }
+        });
+
+        loginWithFacebookView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HiLoginManager.getInstance().login(LoginType.FACEBOOK);
+            }
+        });
+
+       loginWithLine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HiLoginManager.getInstance().login(LoginType.TWITTER);
+            }
+        });
+
+//        activityLoginBinding.loginWithLine.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                HiLoginManager.getInstance().login(LoginType.LINE);
+//            }
+//        });
+//
+//        activityLoginBinding.loginAsVisitor.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                HiLoginManager.getInstance().login(LoginType.VISITOR);
+//            }
+//        });
     }
 }

@@ -10,11 +10,10 @@ import com.hi.base.HiGameListener
 import com.hi.base.data.HiOrder
 import com.hi.base.data.HiProduct
 import com.hi.base.data.HiUser
-import com.hi.base.plugin.itf.IInitCallback
 import com.hi.base.plugin.pay.IPayCallBack
 import com.hi.base.plugin.pay.PayParams
 import com.hi.base.pub.HiGameSDK
-import com.hi.sdk.databinding.ActivityMainBinding
+import com.hi.sdkdemo.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private var TAG="MainActivity"
@@ -49,14 +48,17 @@ class MainActivity : AppCompatActivity() {
 
             override fun onLoginSuccess(user: HiUser?) {
                 TODO("Not yet implemented")
+                Log.d(TAG,"onLoginSuccess :"+user.toString())
             }
 
             override fun onLoginFailed(code: Int, msg: String?) {
+                Log.d(TAG,"onLoginFailed :"+msg)
                 TODO("Not yet implemented")
             }
 
             override fun onUpgradeSuccess(user: HiUser?) {
                 TODO("Not yet implemented")
+
             }
 
             override fun onProductsResult(code: Int, products: MutableList<HiProduct>?) {
@@ -93,6 +95,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun GoogleLogin() {
       //  TODO("Not yet implemented")
+        HiGameSDK.getInstance().Login(this)
     }
 
 
