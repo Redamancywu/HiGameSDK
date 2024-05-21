@@ -36,6 +36,17 @@ public class RewardAdManager {
             }
         }, RELOAD_DELAY_MS);
     }
+    private static RewardAdManager instance;
+    public static RewardAdManager getInstance() {
+        if (instance==null){
+            instance=new RewardAdManager();
+        }
+        return instance;
+    }
+
+    public RewardAdManager() {
+    }
+
     private IRewardAdListener adListener;
 
     private IRewardAdListener adExListener=new IRewardAdListener() {

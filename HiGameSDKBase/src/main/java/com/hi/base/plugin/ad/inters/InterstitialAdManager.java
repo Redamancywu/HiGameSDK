@@ -37,7 +37,13 @@ public class InterstitialAdManager {
             }
         }, RELOAD_DELAY_MS);
     }
-
+    private static InterstitialAdManager instance;
+    public static InterstitialAdManager getInstance() {
+        if (instance==null){
+            instance=new InterstitialAdManager();
+        }
+        return instance;
+    }
     /**
      * 游戏层调用时传入的广告回调监听器
      */

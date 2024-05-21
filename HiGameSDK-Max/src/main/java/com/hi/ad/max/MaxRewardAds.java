@@ -16,7 +16,10 @@ import com.applovin.mediation.ads.MaxRewardedAd;
 import com.hi.base.plugin.HiGameConfig;
 import com.hi.base.plugin.ad.reward.IRewardAdListener;
 import com.hi.base.plugin.ad.reward.RewardAdAdapter;
+import com.hi.base.pub.HiGameSDK;
 import com.hi.base.utils.Constants;
+
+import java.util.HashMap;
 
 public class MaxRewardAds extends RewardAdAdapter {
     private Context mContext;
@@ -115,6 +118,14 @@ public class MaxRewardAds extends RewardAdAdapter {
              @Override
              public void onAdRevenuePaid(@NonNull MaxAd maxAd) {
                  Log.d(Constants.TAG, "onAdRevenuePaid: "+maxAd.getRevenue());
+                 // 创建事件数据 HashMap
+                 HashMap<String, Object> eventData = new HashMap<>();
+                 eventData.put("ad_type", maxAd.getDspName());
+                 eventData.put("ad_placement", maxAd.getPlacement());
+                 eventData.put("ad_network", maxAd.getNetworkName());
+                 eventData.put("ad_unit_id", maxAd.getAdUnitId());
+                 eventData.put("revenue", maxAd.getRevenue());
+                 HiGameSDK.getInstance().onCustomEvent("onAdRevenuePaid", eventData);
              }
          });
         }

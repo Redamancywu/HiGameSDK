@@ -7,8 +7,10 @@ import android.util.Log;
 import com.hi.base.HiGameListener;
 import com.hi.base.data.HiOrder;
 import com.hi.base.data.HiProduct;
+import com.hi.base.data.HiRoleData;
 import com.hi.base.data.HiUser;
 import com.hi.base.manger.HiAdManager;
+import com.hi.base.manger.HiAnalyticsManager;
 import com.hi.base.model.HiAdType;
 import com.hi.base.plugin.HiGameConfig;
 import com.hi.base.plugin.ad.IAdInitializationListener;
@@ -18,6 +20,7 @@ import com.hi.base.plugin.pay.IPayCallBack;
 import com.hi.base.plugin.pay.PayParams;
 import com.hi.base.utils.Constants;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class HiGameSDK {
@@ -140,6 +143,74 @@ public class HiGameSDK {
     }
     public void showRewardVideo(Activity activity){
         SDKManager.getInstance().showRewardAd(activity);
+    }
+    //自定义上报
+    public void onCustomEvent(String eventName, HashMap<String,Object> eventData){
+        SDKManager.getInstance().onCustomEvent(eventName,eventData);
+    }
+    //完成新手教程的时候 执行
+    public void onCompleteTutorial(int tutorialID, String content){
+        SDKManager.getInstance().onCompleteTutorial(tutorialID,content);
+    }
+    //升级
+    public void onLevelup(HiRoleData role){
+        SDKManager.getInstance().onLevelup(role);
+    }
+    //自定义事件， 进入游戏成功
+    public void onEnterGame(HiRoleData role){
+        SDKManager.getInstance().onEnterGame(role);
+    }
+    // 自定义事件， 创建角色成功
+    public void onCreateRole(HiRoleData role){
+        SDKManager.getInstance().onCreateRole(role);
+    }
+    /**
+     * 购买成功的时候，调用
+     * af_purchase
+     * price: 分为单位
+     */
+    public void onPurchase(HiOrder order){
+        SDKManager.getInstance().onPurchase(order);
+    }
+    /**
+     * 自定义事件， 开始购买（SDK下单成功）
+     * price：分为单位
+     */
+    public void onPurchaseBegin(HiOrder order){
+        SDKManager.getInstance().onPurchaseBegin(order);
+    }
+    /**
+     * 注册成功的时候 上报
+     * af_complete_registration
+     */
+    public void onCompleteRegistration(int regType){
+        SDKManager.getInstance().onCompleteRegistration(regType);
+    }
+    /**
+     * 登陆成功的时候 上报
+     * af_login
+     */
+    public void onLogin(){
+        SDKManager.getInstance().onLogin();
+    }
+    /**
+     * 自定义事件： SDK初始化开始
+     */
+    public void onInitStart(){
+        SDKManager.getInstance().onInitStart();
+    }
+
+    /**
+     * 自定义事件： SDK初始化完成
+     */
+    public void onInitFinish(){
+        SDKManager.getInstance().onInitFinish();
+    }
+    /**
+     * 自定义事件： SDK登陆开始
+     */
+    public void onLoginStart(){
+        SDKManager.getInstance().onLoginStart();
     }
 
 

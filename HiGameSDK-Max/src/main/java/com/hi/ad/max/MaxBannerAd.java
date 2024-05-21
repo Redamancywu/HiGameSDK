@@ -154,6 +154,7 @@ public class MaxBannerAd extends BannerAdApter {
                     }
                 }
             });
+
         }
     }
     @Override

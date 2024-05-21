@@ -41,6 +41,8 @@ public class BannerAdManager {
         }, RELOAD_DELAY_MS);
     }
 
+
+
     /**
      * 游戏层调用时传入的广告回调监听器
      */
