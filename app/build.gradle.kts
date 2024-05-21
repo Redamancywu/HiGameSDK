@@ -61,6 +61,7 @@ dependencies {
     implementation(project(":HiGameSDK-GooglePay"))
     implementation(project(":HiGameSDK-Adamob"))
     implementation(project(":HiGameSDK-Login"))
+    implementation(project(":HiGameSDK-Adjust"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

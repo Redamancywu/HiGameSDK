@@ -50,6 +50,15 @@
                 android:layout_marginTop="16dp"
                 android:text="插屏"
                 android:backgroundTint="#9E9E9E" />
+            <Button
+                android:id="@+id/video"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="#9E9E9E"
+                android:text="激励视频"/>
 
             <Button
                 android:id="@+id/bth_LoginGoogle"
@@ -60,7 +69,6 @@
                 android:layout_marginTop="16dp"
                 android:text="登录"
                 android:backgroundTint="#9E9E9E" />
-
             <!-- 在此添加更多按钮 -->
 
         </LinearLayout>

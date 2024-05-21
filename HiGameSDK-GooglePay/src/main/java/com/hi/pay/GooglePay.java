@@ -12,6 +12,9 @@ import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingResult;
 import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.PurchasesUpdatedListener;
+import com.hi.base.HiGameListener;
+import com.hi.base.data.HiOrder;
+import com.hi.base.manger.HiAnalyticsManager;
 import com.hi.base.plugin.HiGameConfig;
 import com.hi.base.plugin.pay.IGooglePay;
 import com.hi.base.plugin.pay.IPayCallBack;
@@ -30,6 +33,8 @@ public class GooglePay extends IGooglePay {
     private String[] subsIdList;
     public static String productId;
     public static String subsId;
+    private HiGameListener paylistener;
+    private HiOrder order;
 
     @Override
     public void init(Context context, HiGameConfig config) {
@@ -54,11 +59,13 @@ public class GooglePay extends IGooglePay {
                 @Override
                 public void onConnectSuccess(BillingClient client) {
                     //客户端连接成功
+                    Log.d(Constants.TAG,"GooglePay onConnectSuccess");
                 }
 
                 @Override
                 public void onConnectFailed() {
                     //客户端链接失败
+                    Log.e(Constants.TAG,"GooglePay onConnectFailed");
 
                 }
             }, new PurchasesUpdatedListener() {
@@ -72,17 +79,29 @@ public class GooglePay extends IGooglePay {
     }
 
     @Override
+    public void setListener(HiGameListener listener) {
+        this.paylistener = listener;
+    }
+
+    @Override
     public void Pay(Activity activity, PayParams params, IPayCallBack callback) {
         if (googleClient.isGooglePlayServiceAvailable(mcontext)) {
             PurchasesPay.getInstance().pay(activity, params, new IPayCallBack() {
                 @Override
                 public void onPaySuccess(String orderId) {
                     Log.d(Constants.TAG,"GooglePay onPaySuccess"+"orderId:"+orderId);
+                    order=new HiOrder();
+                    HiAnalyticsManager.getInstance().onPurchaseBegin(order);
+                    if (paylistener!=null){
+                        paylistener.onPaySuccess(order);
+                    }
+
                 }
 
                 @Override
                 public void onPayFailure(String orderId, int errorCode, String errorMessage) {
                     Log.d(Constants.TAG,"GooglePay onPayFailure"+"orderId:"+orderId+"errorCode:"+errorCode+"errorMessage:"+errorMessage);
+                    paylistener.onPayFailed(errorCode, errorMessage);
                 }
 
                 @Override

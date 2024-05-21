@@ -4,7 +4,7 @@ public enum HiAdType {
     Splash("splash"),
     Banner("banner"),
     Inters("inters"),
-    Video("reward"),
+    Reward("reward"),
     Native("native");
     private String adType;
     private HiAdType(String v) {

@@ -103,4 +103,10 @@ public  class BannerAdApter implements BannerAdListener {
 
     }
 
+    @Override
+    public String getAdId() {
+        return null;
+    }
+
+
 }

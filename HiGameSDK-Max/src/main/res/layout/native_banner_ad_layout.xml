@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.applovin.mediation.nativeAds.MaxNativeAdView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/native_ad_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:layout_gravity="bottom"
+    android:background="@drawable/ad_background">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/ad_info_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/ad_close_button">
+
+            <ImageView
+                android:id="@+id/ad_app_icon"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginEnd="10dp"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/ad_headline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/ad_body"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000000"
+                    android:textSize="14sp"/>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/ad_call_to_action"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:background="@drawable/button_background"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                android:padding="5dp"
+                android:text="Call to Action"/>
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/ad_close_button"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:background="@drawable/ic_close"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:contentDescription="@string/ad_close_button_description"/>
+    </RelativeLayout>
+</com.applovin.mediation.nativeAds.MaxNativeAdView>

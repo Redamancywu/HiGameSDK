@@ -8,14 +8,19 @@ import android.util.Log;
 import android.view.View;
 
 
-
+import com.hi.base.HiGameListener;
 import com.hi.base.R;
 
+import com.hi.base.data.HiOrder;
+import com.hi.base.data.HiProduct;
+import com.hi.base.data.HiUser;
 import com.hi.base.manger.HiLoginManager;
 import com.hi.base.plugin.login.LoginType;
 import com.hi.base.utils.Constants;
 
-public class LoginActivity extends Activity {
+import java.util.List;
+
+public class LoginActivity extends Activity implements HiGameListener {
     private View loginAsVisitorView, loginWithGoogleView, loginWithFacebookView, loginWithLine;
 
     @Override
@@ -92,5 +97,55 @@ public class LoginActivity extends Activity {
 //                HiLoginManager.getInstance().login(LoginType.VISITOR);
 //            }
 //        });
+    }
+
+    @Override
+    public void onInitFailed(int code, String msg) {
+
+    }
+
+    @Override
+    public void onInitSuccess() {
+
+    }
+
+    @Override
+    public void onLogout() {
+
+    }
+
+    @Override
+    public void onLoginSuccess(HiUser user) {
+            finish();
+    }
+
+    @Override
+    public void onLoginFailed(int code, String msg) {
+
+    }
+
+    @Override
+    public void onUpgradeSuccess(HiUser user) {
+
+    }
+
+    @Override
+    public void onProductsResult(int code, List<HiProduct> products) {
+
+    }
+
+    @Override
+    public void onPaySuccess(HiOrder order) {
+
+    }
+
+    @Override
+    public void onPayFailed(int code, String msg) {
+
+    }
+
+    @Override
+    public void onExitSuccess() {
+
     }
 }

@@ -100,15 +100,13 @@ public  class AdmobInterstitialAd extends InterstitialAdAdapter {
             }
             return;
         }
-
-        mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback(){
+        mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
             @Override
             public void onAdClicked() {
                 if (adListener != null) {
                     adListener.onClicked();
                 }
             }
-
             @Override
             public void onAdDismissedFullScreenContent() {
                 // Called when ad is dismissed.
@@ -116,13 +114,11 @@ public  class AdmobInterstitialAd extends InterstitialAdAdapter {
                 if (adListener != null) {
                     adListener.onClosed();
                 }
-
             }
-
             @Override
             public void onAdFailedToShowFullScreenContent(AdError adError) {
                 // Called when ad fails to show.
-                Log.e(Constants.TAG, "AdmobInterstitialAd failed to show."+adError.getCode()+";"+adError.getMessage());
+                Log.e(Constants.TAG, "AdmobInterstitialAd failed to show." + adError.getCode() + ";" + adError.getMessage());
 
                 if (adListener != null) {
                     adListener.onFailed(Constants.CODE_SHOW_FAILED, adError.getMessage());
@@ -132,9 +128,7 @@ public  class AdmobInterstitialAd extends InterstitialAdAdapter {
             @Override
             public void onAdImpression() {
                 // Called when an impression is recorded for an ad
-
             }
-
             @Override
             public void onAdShowedFullScreenContent() {
                 // Called when ad is shown.
@@ -143,8 +137,23 @@ public  class AdmobInterstitialAd extends InterstitialAdAdapter {
                 }
             }
         });
-        ready = false;
-        mInterstitialAd.show(context);
-        mInterstitialAd = null;
+
+        // Check if interstitial ad is loaded before showing
+        if (mInterstitialAd != null) {
+            ready = false;
+            mInterstitialAd.show(context);
+            mInterstitialAd = null;
+        } else {
+            Log.e(Constants.TAG, "AdmobInterstitialAd show failed. mInterstitialAd is null");
+            if (adListener != null) {
+                adListener.onFailed(Constants.CODE_SHOW_FAILED, "ad is null");
+            }
+        }
+    }
+
+
+    @Override
+    public String getAdId() {
+        return InterstitialAdId;
     }
 }

@@ -17,6 +17,7 @@ public class HiLoginManager {
     private static HiLoginManager instance;
     private ILogin login;
     private HiGameListener listener;
+    private Activity activity; // 添加 Activity 引用
 
     public static HiLoginManager getInstance() {
         if (instance==null){
@@ -25,7 +26,8 @@ public class HiLoginManager {
         return instance;
     }
 
-    public void setListener(HiGameListener listener) {
+    public void setListener(HiGameListener listener,Activity activity) {
+        this.activity=activity;
         this.listener = listener;
         if (login != null) {
             login.setListener(listener);

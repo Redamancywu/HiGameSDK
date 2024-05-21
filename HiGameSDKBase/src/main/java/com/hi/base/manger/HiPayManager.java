@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
+import com.hi.base.HiGameListener;
 import com.hi.base.plugin.PluginInfo;
 import com.hi.base.plugin.itf.IPay;
 import com.hi.base.plugin.pay.IPayCallBack;
@@ -21,6 +22,7 @@ public class HiPayManager {
     }
     private IPay pay;
     private IPayCallBack callBack;
+    private HiGameListener listener;
     public void InitPay(Activity activity, PluginInfo pluginInfo){
         if(pluginInfo.getPlugin() == null) {
             Log.w(Constants.TAG,"plugin is not implement IPay");
@@ -30,6 +32,7 @@ public class HiPayManager {
             if(pluginInfo.getPlugin() instanceof IPay){
              pay= (IPay) pluginInfo.getPlugin();
              pay.init(activity,pluginInfo.getGameConfig());
+             pay.setListener(listener);
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -41,5 +44,9 @@ public class HiPayManager {
             return;
         }
         pay.Pay(activity,params,callBack);
+    }
+
+    public void setListener(HiGameListener listener) {
+        this.listener = listener;
     }
 }

@@ -2,7 +2,6 @@ package com.hi.ad.admob;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.LoadAdError;
 import com.hi.base.plugin.HiGameConfig;
-import com.hi.base.plugin.ad.AdApter;
 import com.hi.base.plugin.ad.AdContainer;
 import com.hi.base.plugin.ad.banner.BannerAdApter;
 import com.hi.base.plugin.ad.banner.IBannerListener;
@@ -27,13 +25,12 @@ public class AdmobBannerAd extends BannerAdApter {
     private HiGameConfig config;
     private String bannerPosId;
     private ViewGroup bannerContainer;
-    private IBannerListener BannerAdListener;
+    private IBannerListener bannerAdListener;
 
     @Override
     public void init(Context context, HiGameConfig config) {
-        this.loading = false;
         this.config = config;
-        if (config.contains("banner_pos_id")) {
+        if (config != null && config.contains("banner_pos_id")) {
             bannerPosId = config.getString("banner_pos_id");
         }
     }
@@ -43,86 +40,93 @@ public class AdmobBannerAd extends BannerAdApter {
         return ready;
     }
 
-
     @Override
     public void load(Activity context, String posId) {
-        posId = bannerPosId;  // 确保使用正确的广告单元 ID
         if (loading) {
-            if (BannerAdListener != null) {
-                BannerAdListener.onLoadFailed(Constants.CODE_LOAD_FAILED, "An ad is already loading");
-            }
             Log.w(Constants.TAG, "AdmobBannerAd is already loading. Ignored.");
             return;
         }
-
-        Log.d(Constants.TAG, "AdmobBannerAd load begin. posId: " + posId + "; admob posId: " + posId);
+        Log.d(Constants.TAG, "AdmobBannerAd load begin. posId: " + bannerPosId);
         loading = true;
         ready = false;
-
-        bannerAd = new AdView(context);
-        bannerAd.setAdSize(AdSize.BANNER);
-        bannerAd.setAdUnitId(posId); // 使用本地广告单元 ID
-
-        bannerAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdClicked() {
-                if (BannerAdListener != null) {
-                    BannerAdListener.onClicked();
-                }
+        posId=bannerPosId;
+        if (bannerAd==null){
+            bannerAd = new AdView(context);
+            bannerAd.setAdUnitId(posId);
+            if (adSize != null) {
+                bannerAd.setAdSize(new AdSize(adSize.getWidth(), adSize.getHeight()));
+            } else {
+                bannerAd.setAdSize(AdSize.BANNER);
             }
-
-            @Override
-            public void onAdClosed() {
-                if (BannerAdListener != null) {
-                    BannerAdListener.onClosed();
+            bannerAd.setAdListener(new AdListener() {
+                @Override
+                public void onAdClicked() {
+                    if (bannerAdListener != null) {
+                        bannerAdListener.onClicked();
+                    }
                 }
-            }
 
-            @Override
-            public void onAdFailedToLoad(LoadAdError loadAdError) {
-                loading = false;
-                Log.e(Constants.TAG, "AdmobBannerAd load failed: " + loadAdError.getCode() + "; " + loadAdError.getMessage());
-                if (BannerAdListener != null) {
-                    BannerAdListener.onLoadFailed(Constants.CODE_LOAD_FAILED, loadAdError.getMessage());
+                @Override
+                public void onAdClosed() {
+                    if (bannerAdListener != null) {
+                        bannerAdListener.onClosed();
+                    }
                 }
-            }
 
-            @Override
-            public void onAdLoaded() {
-                Log.d(Constants.TAG, "AdmobBannerAd load success.");
-                loading = false;
-                ready = true;
-                if (BannerAdListener != null) {
-                    BannerAdListener.onLoaded();
+                @Override
+                public void onAdFailedToLoad(LoadAdError loadAdError) {
+                    loading = false;
+                    Log.e(Constants.TAG, "AdmobBannerAd load failed: " + loadAdError.getCode() + "; " + loadAdError.getMessage());
+                    if (bannerAdListener != null) {
+                        bannerAdListener.onLoadFailed(Constants.CODE_LOAD_FAILED, loadAdError.getMessage());
+                    }
                 }
-            }
 
-            @Override
-            public void onAdOpened() {
-                if (BannerAdListener != null) {
-                    BannerAdListener.onShow();
+                @Override
+                public void onAdLoaded() {
+                    Log.d(Constants.TAG, "AdmobBannerAd load success.");
+                    loading = false;
+                    ready = true;
+                    if (bannerAdListener != null) {
+                        bannerAdListener.onLoaded();
+                    }
                 }
-            }
-        });
 
-        // 加载广告
-        AdRequest adRequest = new AdRequest.Builder().build();
-        bannerAd.loadAd(adRequest);
+                @Override
+                public void onAdOpened() {
+                    if (bannerAdListener != null) {
+                        bannerAdListener.onShow();
+                    }
+                }
+            });
+            // 加载广告
+            AdRequest adRequest = new AdRequest.Builder().build();
+            bannerAd.loadAd(adRequest);
+        }
+
     }
-
 
     @Override
     public void show(Activity context) {
         super.show(context);
-        if (bannerAd!=null){
-            bannerContainer = AdContainer.generateBannerViewContainer((Activity) context, AdContainer.POS_BOTTOM);
-            bannerContainer.addView(getBannerView());
-            if (BannerAdListener != null){
-                BannerAdListener.onShow();
+        Log.d(Constants.TAG, "AdmobBannerAd show begin. posId: " + bannerPosId);
+        if (bannerAd != null && bannerContainer != null) {
+            bannerContainer.removeAllViews();
+            bannerContainer.addView(bannerAd);
+            if (bannerAdListener != null) {
+                bannerAdListener.onShow();
+            }
+        } else {
+            if (bannerAd == null) {
+                Log.e(Constants.TAG, "Unable to show banner ad. bannerAd is null.");
+            }
+            if (bannerContainer == null) {
+                Log.e(Constants.TAG, "Unable to show banner ad. bannerContainer is null.");
             }
         }
-
     }
+
+
 
     @Override
     public View getBannerView() {
@@ -132,6 +136,11 @@ public class AdmobBannerAd extends BannerAdApter {
     @Override
     public void setAdListener(IBannerListener adListener) {
         super.setAdListener(adListener);
-        BannerAdListener= adListener;
+        this.bannerAdListener = adListener;
+    }
+
+    @Override
+    public String getAdId() {
+        return bannerPosId;
     }
 }

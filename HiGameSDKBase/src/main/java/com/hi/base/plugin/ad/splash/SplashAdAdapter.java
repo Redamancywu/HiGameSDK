@@ -82,4 +82,9 @@ public  class SplashAdAdapter implements ISplashAd {
     public void show(Activity context) {
 
     }
+
+    @Override
+    public String getAdId() {
+        return null;
+    }
 }

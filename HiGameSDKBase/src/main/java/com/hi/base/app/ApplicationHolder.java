@@ -1,5 +1,6 @@
 package com.hi.base.app;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
@@ -44,8 +45,6 @@ public class ApplicationHolder {
             Log.d(Constants.TAG, "begin to load loal params.");
         //    GlobalConfig.getInstance().loadLocalParams(base);
           //  HttpClient.getInstance().init(true);
-            HiPluginManger.getInstance().InitPlugin(app);
-
            // Log.d(Constants.TAG, "curr sdk version:" + GlobalConfig.getInstance().getLocalSDKVersionName());
         }
     }
@@ -56,7 +55,8 @@ public class ApplicationHolder {
             //初始化插件
             Log.d(Constants.TAG, "begin to load plugins.");
             try {
-                HiPluginManger.getInstance().InitPlugin(app);
+              //  HiPluginManger.getInstance().InitPlugin(app);
+              //  HiPluginManger.getInstance().InitPlugin(app);
              //   UGPlugins.getInstance().initPlugins(app);
             }catch (Exception e){
                 e.printStackTrace();

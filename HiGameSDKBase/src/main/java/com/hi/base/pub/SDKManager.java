@@ -17,10 +17,13 @@ import com.hi.base.plugin.HiGameConfig;
 import com.hi.base.plugin.ad.AdApter;
 import com.hi.base.plugin.ad.AdContainer;
 import com.hi.base.plugin.ad.AdSize;
+import com.hi.base.plugin.ad.IAdInitializationListener;
+import com.hi.base.plugin.ad.IBaseAd;
 import com.hi.base.plugin.ad.banner.BannerAdManager;
 import com.hi.base.plugin.ad.banner.IBannerListener;
 import com.hi.base.plugin.ad.inters.IInterstitialAdListener;
 import com.hi.base.plugin.ad.inters.InterstitialAdManager;
+import com.hi.base.plugin.ad.reward.RewardAdManager;
 import com.hi.base.plugin.itf.IInitCallback;
 import com.hi.base.plugin.pay.IPayCallBack;
 import com.hi.base.plugin.pay.PayParams;
@@ -41,20 +44,19 @@ public class SDKManager {
     }
 
     private ViewGroup bannerContainer;
-
+    private HiGameListener InitCallback;
 
     public void initSDK(Context context, HiGameListener listener) {
         this.listener = listener;
+        this.InitCallback = listener; // 将 listener 赋给 InitCallback
+        onCreate((Activity) context);
+        HiPluginManger.getInstance().InitPlugin(context);
         //初始化SDK
         boolean isSuccessful = true;//默认初始化成功
         if (isSuccessful) {
-         //   HiPluginManger.getInstance().InitPlugin(context);
-
             listener.onInitSuccess();
-            HiLoginManager.getInstance().setListener(listener);
         } else {
             Log.e(Constants.TAG, "SDKManager 初始化失败");
-
             listener.onInitFailed(404, "初始化失败");
         }
     }
@@ -64,13 +66,35 @@ public class SDKManager {
         Log.i(Constants.TAG, "GooglePlayPay");
         HiPayManager.getInstance().Pay(activity, params, callBack);
     }
-    public void Login(Context context){
-        Intent intent=new Intent(context, LoginActivity.class);
-        Log.d(Constants.TAG,"Open Login UI");
+
+    public void Login(Context context) {
+        Intent intent = new Intent(context, LoginActivity.class);
+        Log.d(Constants.TAG, "Open Login UI");
         context.startActivity(intent);
     }
+
+    public void setAdInitSDK() {
+        HiAdManager.getInstance().setInitializationListener(new IAdInitializationListener() {
+            @Override
+            public void onInitSuccess() {
+                //初始化成功
+                InitCallback.onInitSuccess();
+                Log.d(Constants.TAG, "Ad onInitSuccess: ");
+
+            }
+
+            @Override
+            public void onInitFailed(int code, String msg) {
+                //初始化失败
+                InitCallback.onInitFailed(code, msg);
+                Log.d(Constants.TAG, "Ad onInitFailed: " + code + "  " + msg);
+            }
+        });
+    }
+
     private IBannerListener bannerListener;
-    public void showBannerAd(Context context, String posId) {
+
+    public void loadBanner(Context context, String posId) {
         //显示banner广告
         BannerAdManager bannerAd = new BannerAdManager(context, posId);
         bannerAd.setAdSize(AdSize.BANNER_SIZE);
@@ -90,11 +114,11 @@ public class SDKManager {
             public void onLoaded() {
                 Log.d(Constants.TAG, "banner广告加载成功");
                 Log.d(Constants.TAG, "banner广告加载:" + bannerAd.isReady());
-                if (bannerAd.isReady()) {
-                    bannerContainer = AdContainer.generateBannerViewContainer((Activity) context, AdContainer.POS_BOTTOM);
-                    bannerContainer.addView(bannerAd.getBannerView());
-
-                }
+//                if (bannerAd.isReady()) {
+//                    bannerContainer = AdContainer.generateBannerViewContainer((Activity) context, AdContainer.POS_BOTTOM);
+//                    bannerContainer.addView(bannerAd.getBannerView());
+//
+//                }
             }
 
             @Override
@@ -122,7 +146,18 @@ public class SDKManager {
         bannerAd.load(context);
     }
 
-    public void showInterstitialAd(Activity context, String posId) {
+    public void showBanner(Activity activity) {
+        Log.d(Constants.TAG, "showBanner");
+        HiGameConfig config = new HiGameConfig();
+        String posId = config.getString("banner_pos_id");
+        BannerAdManager bannerAdManager = new BannerAdManager(activity, posId);
+      //  bannerAdManager.setAdSize(AdSize.BANNER_SIZE);
+        bannerAdManager.show(activity);
+
+
+    }
+
+    public void loadInterstitialAd(Context context, String posId) {
         InterstitialAdManager inters = new InterstitialAdManager(context, posId);
         inters.setAdListener(new IInterstitialAdListener() {
             @Override
@@ -139,9 +174,9 @@ public class SDKManager {
             @Override
             public void onLoaded() {
                 Log.d(Constants.TAG, "插屏广告加载成功");
-                if (inters.isReady()) {
-                    inters.show(context);
-                }
+//                if (inters.isReady()) {
+//                    inters.show(context);
+//                }
             }
 
             @Override
@@ -169,6 +204,29 @@ public class SDKManager {
             }
         });
         inters.load(context);
+    }
+
+    public void showInters(Activity activity) {
+        HiGameConfig config = new HiGameConfig();
+        String posId = config.getString("inters_pos_id");
+        InterstitialAdManager interstitialAdManager = new InterstitialAdManager(activity, posId);
+        interstitialAdManager.show(activity);
+        Log.d(Constants.TAG, "插屏广告准备就绪：" + interstitialAdManager.isReady());
+        if (interstitialAdManager.isReady()) {
+            Log.d(Constants.TAG, "插屏广告准备就绪：" + interstitialAdManager.isReady());
+
+        }
+    }
+    public void showNativeAd(Activity activity) {
+
+    }
+    public void showRewardAd(Activity activity){
+        HiGameConfig config = new HiGameConfig();
+        String posId = config.getString("reward_pos_id");
+        RewardAdManager reward=new RewardAdManager(activity,posId);
+        Log.d(Constants.TAG, "reward广告展示状态："+reward.isReady());
+        reward.show(activity);
+
     }
 
     public void onCreate(Activity activity) {

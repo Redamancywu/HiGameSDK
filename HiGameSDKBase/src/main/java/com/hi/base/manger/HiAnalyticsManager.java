@@ -9,6 +9,8 @@ import com.hi.base.plugin.PluginInfo;
 import com.hi.base.plugin.analytics.IAnalytics;
 import com.hi.base.utils.Constants;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,13 +18,15 @@ public class HiAnalyticsManager {
     private static HiAnalyticsManager instances;
     private Map<String, PluginInfo> plugins;
     private List<IAnalytics> analyticPlugins;
-    public static HiAnalyticsManager getInstance() {
-        return instances;
+    private HiAnalyticsManager() {
+        this.plugins = new HashMap<>();
+        this.analyticPlugins = new ArrayList<>();
     }
-
-    public HiAnalyticsManager(Map<String, PluginInfo> plugins, List<IAnalytics> analyticPlugins) {
-        this.plugins = plugins;
-        this.analyticPlugins = analyticPlugins;
+    public static synchronized HiAnalyticsManager getInstance() {
+        if (instances == null) {
+            instances = new HiAnalyticsManager();
+        }
+        return instances;
     }
     /**
      * 添加统计插件的实现
@@ -33,22 +37,16 @@ public class HiAnalyticsManager {
             Log.w(Constants.TAG, "registerPlugin in UGAnalytics failed. plugin is null");
             return;
         }
-
         if(!(plugin.getPlugin() instanceof IAnalytics)) {
             Log.w(Constants.TAG, "registerPlugin in UGAnalytics failed. plugin is not implement IAnalytics");
             return;
         }
-
         if(!plugins.containsKey(plugin.getClazz())) {
             plugins.put(plugin.getClazz(), plugin);
-
             IAnalytics analyticsPlugin = (IAnalytics)plugin.getPlugin();
             analyticPlugins.add(analyticsPlugin);
-
             analyticsPlugin.init(context, plugin.getGameConfig());
         }
-
-
     }
 
     public void onInitBegin() {

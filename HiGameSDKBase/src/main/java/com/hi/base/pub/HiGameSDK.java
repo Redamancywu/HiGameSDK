@@ -12,6 +12,7 @@ import com.hi.base.manger.HiAdManager;
 import com.hi.base.model.HiAdType;
 import com.hi.base.plugin.HiGameConfig;
 import com.hi.base.plugin.ad.IAdInitializationListener;
+import com.hi.base.plugin.ad.IBaseAd;
 import com.hi.base.plugin.itf.IInitCallback;
 import com.hi.base.plugin.pay.IPayCallBack;
 import com.hi.base.plugin.pay.PayParams;
@@ -23,6 +24,8 @@ public class HiGameSDK {
     private static HiGameSDK instance;
     private HiGameListener InitCallback;
     private IPayCallBack payCallBack;
+    private String posId;
+    private IBaseAd baseAd;
 
     public static HiGameSDK getInstance() {
         if (instance==null){
@@ -42,6 +45,8 @@ public class HiGameSDK {
     }
     public void init(Context context, HiGameListener listener){
         this.InitCallback=listener;
+        onCreate(context);
+        SDKManager.getInstance().setAdInitSDK();
         SDKManager.getInstance().initSDK(context, new HiGameListener() {
             @Override
             public void onInitFailed(int code, String msg) {
@@ -51,6 +56,7 @@ public class HiGameSDK {
             @Override
             public void onInitSuccess() {
                 listener.onInitSuccess();
+                Log.d(Constants.TAG, "HiGameSDK onInitSuccess: ");
             }
 
             @Override
@@ -119,29 +125,22 @@ public class HiGameSDK {
             }
         });
     }
-    public void setAdInitSDK(){
-        HiAdManager.getInstance().setInitializationListener(new IAdInitializationListener() {
-            @Override
-            public void onInitSuccess() {
-                //初始化成功
-                InitCallback.onInitSuccess();
-                Log.d(Constants.TAG,"onInitSuccess: ");
-            }
-
-            @Override
-            public void onInitFailed(int code, String msg) {
-                //初始化失败
-                InitCallback.onInitFailed(code,msg);
-                Log.d(Constants.TAG,"onInitFailed: "+code+"  "+msg);
-            }
-        });
+//    public void loadBanner(Context context,String posId){
+//        SDKManager.getInstance().loadBanner(context, posId);
+//    }
+//
+//    public void loadInterstitial(Context context,String posId){
+//        SDKManager.getInstance().loadInterstitialAd(context, posId);
+//    }
+    public void showBanner(Activity activity){
+        SDKManager.getInstance().showBanner(activity);
     }
-    public void showBanner(Context context,String posId){
-        SDKManager.getInstance().showBannerAd(context, posId);
+    public void showInterstitial(Activity activity){
+        SDKManager.getInstance().showInters(activity);
+    }
+    public void showRewardVideo(Activity activity){
+        SDKManager.getInstance().showRewardAd(activity);
     }
 
-    public void showInterstitial(Activity context,String posId){
-        SDKManager.getInstance().showInterstitialAd(context, posId);
-    }
 
 }

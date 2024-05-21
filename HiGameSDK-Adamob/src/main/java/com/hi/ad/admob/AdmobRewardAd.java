@@ -61,27 +61,19 @@ public class AdmobRewardAd extends RewardAdAdapter {
             Log.w(Constants.TAG, "AdmobRewardAd is already loading. ignored");
             return;
         }
-
-        if (ready) {
-            Log.w(Constants.TAG, "AdmobRewardAd is already loaded. ignored");
-            if (adListener != null) {
-                adListener.onLoaded();
-            }
-            return;
-        }
-
+        posId=RewardAdUnitId;
         // 通过广告映射关系，获取admob的激励视频广告位ID
-        String adPosId = posId;
-        if (pluginParams.contains(posId)) {
-            adPosId = pluginParams.getString(posId);
-        }
+//        String adPosId = posId;
+//        if (pluginParams.contains(posId)) {
+//            adPosId = pluginParams.getString(posId);
+//        }
 
         Log.d(Constants.TAG, "AdmobRewardAd load begin. posId:"+posId+";admob posId:" + posId);
         loading = true;
         ready = false;
 
         AdRequest adRequest = new AdRequest.Builder().build();
-        RewardedAd.load(context, adPosId,
+        RewardedAd.load(context, posId,
                 adRequest, new RewardedAdLoadCallback() {
                     @Override
                     public void onAdFailedToLoad(LoadAdError loadAdError) {
@@ -170,5 +162,10 @@ public class AdmobRewardAd extends RewardAdAdapter {
         ready = false;
         mRewardVideoAd = null;
 
+    }
+
+    @Override
+    public String getAdId() {
+        return RewardAdUnitId;
     }
 }

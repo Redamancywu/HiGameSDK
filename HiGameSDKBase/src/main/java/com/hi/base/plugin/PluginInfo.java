@@ -31,6 +31,20 @@ public class PluginInfo {
     /**
      * 子插件对象
      */
+
+    /**
+     * 广告位 ID
+     */
+    private String adId;
+
+    public String getAdId() {
+        return adId;
+    }
+
+    public void setAdId(String adId) {
+        this.adId = adId;
+    }
+
     private List<PluginInfo> children;
 
     public String getType() {

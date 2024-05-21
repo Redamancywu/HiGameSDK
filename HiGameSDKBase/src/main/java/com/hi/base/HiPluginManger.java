@@ -32,6 +32,8 @@ import java.util.List;
 
 public class HiPluginManger {
     private static HiPluginManger instance;
+    List<PluginInfo> pluginInfoList = new ArrayList<>();
+// 添加多个插件信息到列表中，例如 BannerAdApter、InterstitialAdAdapter、RewardAdAdapter 等
 
     public static HiPluginManger getInstance() {
         if (instance==null){
@@ -48,7 +50,6 @@ public class HiPluginManger {
               continue;
           }
             Log.d(Constants.TAG, "begin to register a new plugin type:" + pluginInfo.getType() + "; class:" + pluginInfo.getClazz());
-
             if (IAd.type.equals(pluginInfo.getType())){
                 HiAdManager.getInstance().initPlugin(context,pluginInfo);
             }

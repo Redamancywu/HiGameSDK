@@ -145,4 +145,9 @@ public class AdmobSplashAd extends SplashAdAdapter {
         mSplashAd.show(context);
         mSplashAd = null;
     }
+
+    @Override
+    public String getAdId() {
+        return SplashAdId;
+    }
 }

@@ -20,4 +20,9 @@ public interface IBaseAd extends IPlugin {
      * 展示广告
      */
     void show(Activity context);
+    /**
+     * 广告id
+     */
+    String getAdId();
+
 }

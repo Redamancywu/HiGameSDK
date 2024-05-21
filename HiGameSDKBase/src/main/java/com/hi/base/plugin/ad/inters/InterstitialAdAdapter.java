@@ -13,6 +13,11 @@ public  class InterstitialAdAdapter implements IInterstitialAd {
         this.adListener = adListener;
     }
 
+    @Override
+    public void close() {
+
+    }
+
     public void clearAdListener() {
         this.adListener = null;
     }
@@ -80,5 +85,10 @@ public  class InterstitialAdAdapter implements IInterstitialAd {
     @Override
     public void show(Activity context) {
 
+    }
+
+    @Override
+    public String getAdId() {
+        return null;
     }
 }

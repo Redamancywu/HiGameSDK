@@ -3,6 +3,7 @@ package com.hi.base.plugin.ad.banner;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 
@@ -15,9 +16,11 @@ import com.hi.base.plugin.ad.AdSize;
 import com.hi.base.utils.ClassUtils;
 import com.hi.base.utils.Constants;
 public class BannerAdManager {
+    private static final String TAG = "BannerAdManager";
     public final static String TYPE = HiAdType.Banner.getAdType() == null ? "" : HiAdType.Banner.getAdType();
     private static BannerAdManager instance;
     private BannerAdListener bannerAdListener;
+    private IBannerListener adListener;
 
     /**
      * 广告位ID（一般如果有多个广告位，用于区分母包调用的是哪个广告）
@@ -27,6 +30,16 @@ public class BannerAdManager {
     private AdSize adSize;
 
     private Context context;
+    private static final int RELOAD_DELAY_MS = 10000*6; // 10 seconds
+    private Handler handler = new Handler();
+    private void scheduleReload() {
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                load(context);
+            }
+        }, RELOAD_DELAY_MS);
+    }
 
     /**
      * 游戏层调用时传入的广告回调监听器
@@ -46,23 +59,25 @@ public class BannerAdManager {
     private IBannerListener adExListener = new IBannerListener() {
         @Override
         public void onFailed(int code, String msg) {
-            Log.e(Constants.TAG, "BannerManager banner广告失败：" + msg);
+            Log.e(Constants.TAG, TAG+"BannerManager banner广告失败：" + msg);
             if (bannerListener != null) {
                 bannerListener.onFailed(code, msg);
             }
+            scheduleReload();
         }
 
         @Override
         public void onLoadFailed(int code, String msg) {
-            Log.e(Constants.TAG, "BannerManager banner广告加载失败：" + msg);
+            Log.e(Constants.TAG, TAG+"BannerManager banner广告加载失败：" + msg);
             if (bannerListener != null) {
                 bannerListener.onLoadFailed(code, msg);
             }
+            scheduleReload();
         }
 
         @Override
         public void onLoaded() {
-            Log.d(Constants.TAG, "BannerManager banner广告加载成功");
+            Log.d(Constants.TAG, TAG+"BannerManager banner广告加载成功");
             if (bannerListener != null) {
                 bannerListener.onLoaded();
             }
@@ -70,7 +85,7 @@ public class BannerAdManager {
 
         @Override
         public void onShow() {
-            Log.d(Constants.TAG, "BannerManager banner广告展示");
+            Log.d(Constants.TAG, TAG+"BannerManager banner广告展示");
             if (bannerListener != null) {
                 bannerListener.onShow();
             }
@@ -78,7 +93,7 @@ public class BannerAdManager {
 
         @Override
         public void onClicked() {
-            Log.d(Constants.TAG, "BannerManager banner广告点击");
+            Log.d(Constants.TAG, TAG+"BannerManager banner广告点击");
             if (bannerListener != null) {
                 bannerListener.onClicked();
             }
@@ -86,7 +101,7 @@ public class BannerAdManager {
 
         @Override
         public void onClosed() {
-            Log.d(Constants.TAG, "BannerManager banner广告关闭");
+            Log.d(Constants.TAG, TAG+"BannerManager banner广告关闭");
             if (bannerListener != null) {
                 bannerListener.onClosed();
             }
@@ -94,7 +109,7 @@ public class BannerAdManager {
 
         @Override
         public void onSkip() {
-            Log.d(Constants.TAG, "BannerManager banner广告跳过");
+            Log.d(Constants.TAG, TAG+"BannerManager banner广告跳过");
             if (bannerListener != null) {
                 bannerListener.onSkip();
             }
@@ -104,7 +119,7 @@ public class BannerAdManager {
     public BannerAdManager(Context context, String posId) {
         this.posId = posId;
         this.context = context;
-        Log.d(Constants.TAG, "BannerAdManager init:" + HiAdManager.getInstance().getChild(TYPE));
+        Log.d(Constants.TAG, TAG+"BannerAdManager init:" + HiAdManager.getInstance().getChild(TYPE));
         registerPlugin(HiAdManager.getInstance().getChild(TYPE));
     }
 
@@ -115,13 +130,13 @@ public class BannerAdManager {
      */
     private void registerPlugin(PluginInfo pluginInfo) {
         if (pluginInfo == null) {
-            Log.w(Constants.TAG, "registerPlugin in BannerAd failed. pluginInfo is null");
+            Log.w(Constants.TAG, TAG+"registerPlugin in BannerAd failed. pluginInfo is null");
             return;
         }
 
         IPlugin plugin = (IPlugin) ClassUtils.doNoArgsInstance(pluginInfo.getClazz());
         if (!(plugin instanceof BannerAdListener)) {
-            Log.w(Constants.TAG, "registerPlugin in BannerAd failed. plugin is not implement BannerAdListener");
+            Log.w(Constants.TAG, TAG+"registerPlugin in BannerAd failed. plugin is not implement BannerAdListener");
             return;
         }
         this.bannerAdListener = (BannerAdListener) plugin;
@@ -137,7 +152,7 @@ public class BannerAdManager {
     public void load(Context context) {
         if (!isPluginValid(true)) return;
         if (bannerAdListener.isReady()) {
-            Log.d(Constants.TAG, "Banner ad is already loaded and ready.");
+            Log.d(Constants.TAG, TAG+"Banner ad is already loaded and ready.");
             if (bannerListener != null) {
                 bannerListener.onLoaded();
             }
@@ -159,7 +174,7 @@ public class BannerAdManager {
             if (bannerListener != null && triggerEvent) {
                 bannerListener.onLoadFailed(Constants.CODE_LOAD_FAILED, "ad load failed. plugin is null");
             }
-            Log.e(Constants.TAG, "ad load failed. plugin is null");
+            Log.e(Constants.TAG, TAG+"ad load failed. plugin is null");
             return false;
         }
         return true;
@@ -172,7 +187,7 @@ public class BannerAdManager {
      */
     public View getBannerView() {
         if (!isPluginValid(true)) return null;
-        Log.d(Constants.TAG, "getBannerView");
+        Log.d(Constants.TAG, TAG+"getBannerView");
         return this.bannerAdListener.getBannerView();
     }
 
@@ -194,5 +209,22 @@ public class BannerAdManager {
     public boolean isReady() {
         if (!isPluginValid(false)) return false;
         return this.bannerAdListener.isReady();
+    }
+    public void show(Activity activity){
+        if (!isPluginValid(true)) return;
+       try {
+           this.bannerAdListener.show(activity);
+       }catch (Exception e){
+           if (adListener != null) {
+               adListener.onLoadFailed(Constants.CODE_SHOW_FAILED, "ad show failed with exception:"+e.getMessage());
+           }
+           e.printStackTrace();
+       }
+    }
+    public String getAdId(){
+        if (!isPluginValid(false)){
+            return "ad_id";
+        }
+        return this.bannerAdListener.getAdId();
     }
 }

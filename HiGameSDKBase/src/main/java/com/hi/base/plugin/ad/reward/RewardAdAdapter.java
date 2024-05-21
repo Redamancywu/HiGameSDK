@@ -82,4 +82,9 @@ public  class RewardAdAdapter implements IRewardAd {
     public void show(Activity context) {
 
     }
+
+    @Override
+    public String getAdId() {
+        return null;
+    }
 }

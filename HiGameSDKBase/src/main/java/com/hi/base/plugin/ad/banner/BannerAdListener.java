@@ -9,7 +9,6 @@ import com.hi.base.plugin.ad.IBaseAd;
  * @ClassName: BannerAdListener
  */
 public interface BannerAdListener extends IBaseAd {
-
     View getBannerView();
     void close();
 

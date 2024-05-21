@@ -38,6 +38,11 @@ public class MaxInterstitialAds extends InterstitialAdAdapter {
     }
 
     @Override
+    public String getAdId() {
+        return InterstitialAdId;
+    }
+
+    @Override
     public void setAdListener(IInterstitialAdListener adListener) {
         super.setAdListener(adListener);
         this.interstitialAdListener=adListener;

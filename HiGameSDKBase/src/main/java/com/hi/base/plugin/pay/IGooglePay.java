@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
+import com.hi.base.HiGameListener;
 import com.hi.base.plugin.HiGameConfig;
 import com.hi.base.plugin.itf.IPay;
 import com.hi.base.plugin.pay.IPayCallBack;
@@ -84,5 +85,10 @@ public class IGooglePay implements IPay {
     @Override
     public String getProductInfo() {
         return null;
+    }
+
+    @Override
+    public void setListener(HiGameListener listener) {
+
     }
 }

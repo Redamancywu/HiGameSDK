@@ -2,6 +2,7 @@ package com.hi.base.plugin.ad.inters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
 import android.util.Log;
 
 import com.hi.base.manger.HiAdManager;
@@ -13,6 +14,7 @@ import com.hi.base.utils.ClassUtils;
 import com.hi.base.utils.Constants;
 
 public class InterstitialAdManager {
+    private static final String TAG = "InterstitialAdManager";
     public final static String TYPE= HiAdType.Inters.getAdType()== null ? "" : HiAdType.Inters.getAdType();
     /**
      * 具体的广告插件中插屏实现类
@@ -25,7 +27,16 @@ public class InterstitialAdManager {
     private String posId;
 
     private Context context;
-
+    private static final int RELOAD_DELAY_MS = 10000*6; // 10 seconds
+    private Handler handler = new Handler();
+    private void scheduleReload() {
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                load(context);
+            }
+        }, RELOAD_DELAY_MS);
+    }
 
     /**
      * 游戏层调用时传入的广告回调监听器
@@ -34,23 +45,25 @@ public class InterstitialAdManager {
     private IInterstitialAdListener adExListener = new IInterstitialAdListener() {
         @Override
         public void onFailed(int code, String msg) {
-            Log.e(Constants.TAG, "ad show failed. code:"+code+";msg:"+msg);
+            Log.e(Constants.TAG, TAG+ "ad show failed. code:"+code+";msg:"+msg);
             if (adListener != null) {
                 adListener.onFailed(code, msg);
             }
+            scheduleReload();
         }
 
         @Override
         public void onLoadFailed(int code, String msg) {
-            Log.e(Constants.TAG, "ad load failed. code:"+code+";msg:"+msg);
+            Log.e(Constants.TAG, TAG+ "ad load failed. code:"+code+";msg:"+msg);
             if (adListener != null) {
                 adListener.onLoadFailed(code, msg);
             }
+            scheduleReload();
         }
 
         @Override
         public void onLoaded() {
-            Log.d(Constants.TAG, "ad loaded");
+            Log.d(Constants.TAG, TAG+ "ad loaded");
             if (adListener != null) {
                 adListener.onLoaded();
             }
@@ -58,7 +71,7 @@ public class InterstitialAdManager {
 
         @Override
         public void onShow() {
-            Log.d(Constants.TAG, "ad show");
+            Log.d(Constants.TAG, TAG+ "ad show");
             if (adListener != null) {
                 adListener.onShow();
             }
@@ -66,7 +79,7 @@ public class InterstitialAdManager {
 
         @Override
         public void onClicked() {
-            Log.d(Constants.TAG, "ad clicked");
+            Log.d(Constants.TAG, TAG+ "ad clicked");
             if (adListener != null) {
                 adListener.onClicked();
             }
@@ -74,7 +87,7 @@ public class InterstitialAdManager {
 
         @Override
         public void onClosed() {
-            Log.d(Constants.TAG, "ad closed");
+            Log.d(Constants.TAG, TAG+ "ad closed");
             if (adListener != null) {
                 adListener.onClosed();
             }
@@ -82,7 +95,7 @@ public class InterstitialAdManager {
 
         @Override
         public void onSkip() {
-            Log.d(Constants.TAG, "ad skip");
+            Log.d(Constants.TAG, TAG+ "ad skip");
             if (adListener != null) {
                 adListener.onSkip();
             }
@@ -95,7 +108,7 @@ public class InterstitialAdManager {
     public InterstitialAdManager(Context context, String posId) {
         this.posId=posId;
         this.context = context;
-        Log.d(Constants.TAG, "InterstitialAdManager posId:"+posId+"TYPE:"+TYPE);
+        Log.d(Constants.TAG, TAG+ "InterstitialAdManager posId:"+posId+"TYPE:"+TYPE);
         registerPlugin(HiAdManager.getInstance().getChild(TYPE));
     }
     /**
@@ -103,15 +116,15 @@ public class InterstitialAdManager {
      * @param pluginInfo
      */
     private void registerPlugin(PluginInfo pluginInfo) {
-        Log.d(Constants.TAG, "registerPlugin in InterstitialAd "+pluginInfo);
+        Log.d(Constants.TAG, TAG+ "registerPlugin in InterstitialAd "+pluginInfo);
         if(pluginInfo == null) {
-            Log.w(Constants.TAG, "registerPlugin in InterstitialAd failed. pluginInfo is null");
+            Log.w(Constants.TAG, TAG+ "registerPlugin in InterstitialAd failed. pluginInfo is null");
             return;
         }
 
         IPlugin plugin = (IPlugin) ClassUtils.doNoArgsInstance(pluginInfo.getClazz());
         if(!(plugin instanceof IInterstitialAd)) {
-            Log.w(Constants.TAG, "registerPlugin in InterstitialAd failed. plugin is not implement IInterstitialAd");
+            Log.w(Constants.TAG, TAG+ "registerPlugin in InterstitialAd failed. plugin is not implement IInterstitialAd");
             return;
         }
 
@@ -175,10 +188,16 @@ public class InterstitialAdManager {
             if (adListener != null && triggerEvent) {
                 adListener.onLoadFailed(Constants.CODE_LOAD_FAILED, "ad load failed. plugin is null");
             }
-            Log.e(Constants.TAG, "ad load failed. plugin is null");
+            Log.e(Constants.TAG, TAG+ "ad load failed. plugin is null");
             return false;
         }
 
         return true;
+    }
+    public String getAdId(){
+        if (!isPluginValid(false)){
+            return "ad_id";
+        }
+        return plugin.getAdId();
     }
 }

@@ -37,6 +37,11 @@ public class MaxBannerAd extends BannerAdApter {
     }
 
     @Override
+    public String getAdId() {
+        return bannerPosId;
+    }
+
+    @Override
     public void setAdListener(IBannerListener adListener) {
         super.setAdListener(adListener);
         bannerListener=adListener;

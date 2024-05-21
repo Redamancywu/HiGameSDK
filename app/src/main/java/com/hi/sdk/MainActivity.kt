@@ -30,7 +30,6 @@ class MainActivity : AppCompatActivity() {
                 insets
             }
         }
-        HiGameSDK.getInstance().onCreate(this)
         HiGameSDK.getInstance().init(this, object :
             HiGameListener {
             override fun onInitFailed(code: Int, msg: String?) {
@@ -79,17 +78,29 @@ class MainActivity : AppCompatActivity() {
 
 
         })
-        HiGameSDK.getInstance().setAdInitSDK();
+       // HiGameSDK.getInstance().onCreate(this)
         bindings!!.button.setOnClickListener { GooglePay("123456789") }
         bindings!!.button2.setOnClickListener { showBannerAd()  }
         bindings!!.button3.setOnClickListener { IntervalAd()   }
         bindings!!.bthLoginGoogle.setOnClickListener { GoogleLogin() }
+        bindings!!.video.setOnClickListener { showReward() }
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        HiGameSDK.getInstance().onCreate(this)
+    }
+
+    private fun showReward() {
+     //   TODO("Not yet implemented")
+        HiGameSDK.getInstance().showRewardVideo(this)
 
     }
 
     private fun showBannerAd() {
       //  TODO("Not yet implemented")
-        HiGameSDK.getInstance().showBanner(this,"ca-app-pub-2382347120869101/4630096608")
+        HiGameSDK.getInstance().showBanner(this)
     }
 
 
@@ -101,8 +112,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun IntervalAd() {
        // TODO("Not yet implemented")
-        HiGameSDK.getInstance().showInterstitial(this,"ca-app-pub-2382347120869101/4630096608")
+        HiGameSDK.getInstance().showInterstitial(this)
     }
+
 
     fun GooglePay(id:String){
         var payParams= PayParams()
