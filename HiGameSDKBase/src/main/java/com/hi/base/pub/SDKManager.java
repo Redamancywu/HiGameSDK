@@ -153,12 +153,12 @@ public class SDKManager {
 
     public void showBanner(Activity activity) {
         Log.d(Constants.TAG, "showBanner");
-//        HiGameConfig config = new HiGameConfig();
-////        String posId = config.getString("banner_pos_id");
-////        BannerAdManager bannerAdManager = new BannerAdManager(activity, posId);
-////      //  bannerAdManager.setAdSize(AdSize.BANNER_SIZE);
-////        bannerAdManager.show(activity);
-        BannerAdManager.getInstance().show(activity);
+        HiGameConfig config = new HiGameConfig();
+        String posId = config.getString("banner_pos_id");
+        BannerAdManager bannerAdManager = new BannerAdManager(activity, posId);
+      //  bannerAdManager.setAdSize(AdSize.BANNER_SIZE);
+        bannerAdManager.show(activity);
+     //   BannerAdManager.getInstance().show(activity);
 
 
     }
@@ -215,16 +215,16 @@ public class SDKManager {
 
     public void showInters(Activity activity) {
         Log.d(Constants.TAG, "showInters");
-        InterstitialAdManager.getInstance().show(activity);
-//        HiGameConfig config = new HiGameConfig();
-//        String posId = config.getString("inters_pos_id");
-//        InterstitialAdManager interstitialAdManager = new InterstitialAdManager(activity, posId);
-//        interstitialAdManager.show(activity);
-//        Log.d(Constants.TAG, "插屏广告准备就绪：" + interstitialAdManager.isReady());
-//        if (interstitialAdManager.isReady()) {
-//            Log.d(Constants.TAG, "插屏广告准备就绪：" + interstitialAdManager.isReady());
-//
-//        }
+      //  InterstitialAdManager.getInstance().show(activity);
+        HiGameConfig config = new HiGameConfig();
+        String posId = config.getString("inters_pos_id");
+        InterstitialAdManager interstitialAdManager = new InterstitialAdManager(activity, posId);
+        interstitialAdManager.show(activity);
+        Log.d(Constants.TAG, "插屏广告准备就绪：" + interstitialAdManager.isReady());
+        if (interstitialAdManager.isReady()) {
+            Log.d(Constants.TAG, "插屏广告准备就绪：" + interstitialAdManager.isReady());
+
+        }
     }
     public void showNativeAd(Activity activity) {
 
