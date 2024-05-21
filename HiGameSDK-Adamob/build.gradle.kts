@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.hi.higamesdk_adamob"
+    namespace = "com.hi.ad.admob"
     compileSdk = 34
 
     defaultConfig {

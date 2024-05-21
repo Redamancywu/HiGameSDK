@@ -24,7 +24,7 @@ import com.hi.base.plugin.HiGameConfig;
 import com.hi.base.plugin.ad.inters.IInterstitialAdListener;
 import com.hi.base.plugin.ad.inters.InterstitialAdAdapter;
 import com.hi.base.utils.Constants;
-import com.hi.higamesdk_adamob.R;
+
 
 public class AdmobNativeInterstitialAd extends InterstitialAdAdapter {
     private NativeAd nativeAd;

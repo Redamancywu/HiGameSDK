@@ -21,7 +21,7 @@ import com.hi.base.plugin.HiGameConfig;
 import com.hi.base.plugin.ad.banner.BannerAdApter;
 import com.hi.base.plugin.ad.banner.IBannerListener;
 import com.hi.base.utils.Constants;
-import com.hi.higamesdk_adamob.R;
+
 
 public class AdmobNativeBanner extends BannerAdApter {
     private HiGameConfig config;

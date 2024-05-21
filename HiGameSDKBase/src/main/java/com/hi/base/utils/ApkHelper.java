@@ -5,10 +5,14 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.Resources;
+import android.content.res.XmlResourceParser;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 
+
+import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -179,4 +183,20 @@ public class ApkHelper {
 
 		return false;
 	}
+
+	/**
+	 * 从资源文件中获取 XmlResourceParser 对象
+	 * @param context 上下文
+	 * @param resourceName 资源名称
+	 * @return XmlResourceParser 对象，如果资源不存在则返回 null
+	 */
+	public static XmlResourceParser getXmlResourceParser(Context context, String resourceName) {
+		Resources resources = context.getResources();
+		int resourceId = resources.getIdentifier(resourceName, "xml", context.getPackageName());
+		if (resourceId == 0) {
+			Log.e(Constants.TAG, "Resource " + resourceName + " not found");
+			return null;
+		}
+        return resources.getXml(resourceId);
+    }
 }

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="plugins">
+        <item>
+            <plugin type="pay" name="GooglePay" class="com.hi.pay.GooglePay">
+                <params>
+                    <param name="productInapp" value=""/>
+                    <param name="productSub" value=""/>
+                </params>
+            </plugin>
+        </item>
+        <item>
+            <plugin type="analytics" name="adjust" class="com.hi.adjust.Adjust">
+                <params>
+                    <param name="dev.key" value="Gc6bE8V9CcgP8wsjGZUMAX"/>
+                    <param name="dev.purchase.log.type" value="auto"/>
+                    <param name="dev.purchase.env" value="sandbox"/>
+                </params>
+            </plugin>
+        </item>
+        <item>
+            <plugin type="login" name="Login" class="com.hi.login.HiGameLogin">
+                <params>
+                    <param name="google_client_id" value="1:434805631021:android:699a09f0b065ff3484b0a4"/>
+                </params>
+            </plugin>
+        </item>
+        <item>
+            <plugin type="ad" name="admob" class="com.hi.ad.admob.AdmobAd">
+                <params>
+                    <param name="application.id" value="ca-app-pub-2382347120869101~2642437601"/>
+                </params>
+                <children>
+                    <plugin type="banner" name="banner" class="com.hi.ad.admob.AdmobBannerAd">
+                        <params>
+                            <param name="banner_pos_id" value="ca-app-pub-2382347120869101/1444890093"/>
+                        </params>
+                    </plugin>
+                    <plugin type="inters" name="inters" class="com.hi.ad.admob.AdmobInterstitialAd">
+                        <params>
+                            <param name="inters_pos_id" value="ca-app-pub-2382347120869101/4630096608"/>
+                        </params>
+                    </plugin>
+                    <plugin type="reward" name="reward" class="com.hi.ad.admob.AdmobRewardAd">
+                        <params>
+                            <param name="reward_pos_id" value="ca-app-pub-2382347120869101/2134606498"/>
+                        </params>
+                    </plugin>
+                </children>
+            </plugin>
+        </item>
+    </array>
+</resources>

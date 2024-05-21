@@ -3,6 +3,7 @@ package com.hi.base;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.XmlResourceParser;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -21,10 +22,12 @@ import com.hi.base.plugin.login.ILogin;
 import com.hi.base.utils.ApkHelper;
 import com.hi.base.utils.ClassUtils;
 import com.hi.base.utils.Constants;
+import com.hi.base.utils.ResourceUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xmlpull.v1.XmlPullParser;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -44,6 +47,7 @@ public class HiPluginManger {
     private List<PluginInfo> pluginInfos;
     public void InitPlugin(Context context){
         pluginInfos=loadFromFile(context);
+       // pluginInfos.addAll(loadFromXml(context));
         for(PluginInfo pluginInfo:pluginInfos){
           if (pluginInfo==null){
               Log.e(Constants.TAG,"plugin instance failed." + pluginInfo.getClazz());
@@ -61,6 +65,7 @@ public class HiPluginManger {
     }
     public void registerPlugin(Activity activity){
         pluginInfos=loadFromFile(activity);
+     //   pluginInfos.addAll(loadFromXml(activity));
         for(PluginInfo pluginInfo:pluginInfos) {
             if (pluginInfo == null) {
                 Log.e(Constants.TAG, "plugin instance failed." + pluginInfo.getClazz());
@@ -80,7 +85,6 @@ public class HiPluginManger {
      * @return
      */
     private List<PluginInfo> loadFromFile(Context context) {
-
         String content = ApkHelper.loadAssetFile(context,"hi_game_plugins.json");
         if(TextUtils.isEmpty(content)) {
             Log.w(Constants.TAG, "there is no plugin in ug_plugins.json");
@@ -101,7 +105,77 @@ public class HiPluginManger {
         }
         return result;
     }
+    // 新增：从 XML 文件中解析插件信息
+    private List<PluginInfo> loadFromXml(Context context) {
+        List<PluginInfo> result = new ArrayList<>();
+        try {
+//            int resourceId =ApkHelper.getXmlResourceParser(context,"config");
+//            //context.getResources().getIdentifier("config", "xml", context.getPackageName());
+//            if (resourceId == 0) {
+//                Log.w(Constants.TAG, "config.xml not found");
+//                return result;
+//            }
+            XmlResourceParser parser = ApkHelper.getXmlResourceParser(context, "config");
+                    //context.getResources().getXml(resourceId);
+            int eventType = parser.getEventType();
+            PluginInfo currentPlugin = null;
+            HiGameConfig currentParams = null;
+            List<PluginInfo> currentChildren = null;
 
+            while (eventType != XmlResourceParser.END_DOCUMENT) {
+                switch (eventType) {
+                    case XmlResourceParser.START_TAG:
+                        if ("plugin".equals(parser.getName())) {
+                            currentPlugin = new PluginInfo();
+                            currentPlugin.setType(parser.getAttributeValue(null, "type"));
+                            currentPlugin.setName(parser.getAttributeValue(null, "name"));
+                            currentPlugin.setClazz(parser.getAttributeValue(null, "class"));
+                        } else if ("params".equals(parser.getName()) && currentPlugin != null) {
+                            currentParams = new HiGameConfig();
+                        } else if ("param".equals(parser.getName()) && currentParams != null) {
+                            String key = parser.getAttributeValue(null, "name");
+                            String value = parser.getAttributeValue(null, "value");
+                            currentParams.put(key, value);
+                        } else if ("children".equals(parser.getName()) && currentPlugin != null) {
+                            currentChildren = new ArrayList<>();
+                        }
+                        break;
+                    case XmlResourceParser.END_TAG:
+                        if ("plugin".equals(parser.getName())) {
+                            if (currentPlugin != null) {
+                                if (currentParams != null) {
+                                    currentPlugin.setGameConfig(currentParams);
+                                    currentParams = null;
+                                }
+                                if (currentChildren != null) {
+                                    currentPlugin.setChildren(currentChildren);
+                                    currentChildren = null;
+                                }
+                                result.add(currentPlugin);
+                                currentPlugin = null;
+                            }
+                        } else if ("param".equals(parser.getName())) {
+                            // Do nothing, end of a param tag
+                        } else if ("plugin".equals(parser.getName()) && currentChildren != null) {
+                            PluginInfo childPlugin = new PluginInfo();
+                            childPlugin.setType(parser.getAttributeValue(null, "type"));
+                            childPlugin.setName(parser.getAttributeValue(null, "name"));
+                            childPlugin.setClazz(parser.getAttributeValue(null, "class"));
+                            if (currentParams != null) {
+                                childPlugin.setGameConfig(currentParams);
+                                currentParams = null;
+                            }
+                            currentChildren.add(childPlugin);
+                        }
+                        break;
+                }
+                eventType = parser.next();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
     //解析单个插件
     private PluginInfo parsePlugin(JSONObject pluginJson, boolean instanceImmediately) {
 
