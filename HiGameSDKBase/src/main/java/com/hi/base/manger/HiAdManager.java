@@ -56,9 +56,9 @@ public class HiAdManager {
                     if (initializationListener != null) {
                         initializationListener.onInitSuccess();
                         Log.d(Constants.TAG, "Ad init onInitSuccess");
-                        loadBanner(activity);
-                        loadInterstitial(activity);
-                        loadReward(activity);
+//                        loadBanner(activity);
+//                        loadInterstitial(activity);
+//                        loadReward(activity);
                         //  loadInterstitial(activity, pluginInfo);
                         //  loadReward(activity, pluginInfo);
                     }
@@ -99,29 +99,29 @@ public class HiAdManager {
         return null;
     }
 
-
-    private void loadBanner(Context context) {
-        // 检查传入的广告对象是否是 BannerAdApter 类型的实例
-        HiGameConfig config = new HiGameConfig();
-        String posId = config.getString("banner_pos_id");
-        BannerAdManager banner = new BannerAdManager(context, posId);
-        banner.load(context);
-    }
-
-    private void loadInterstitial(Context context ) {
-        // 加载插屏广告
-        HiGameConfig config = new HiGameConfig();
-        String posId = config.getString("inters_pos_id");
-        InterstitialAdManager interstitial = new InterstitialAdManager(context, posId);
-        interstitial.load(context);
-    }
-
-    private void loadReward(Context context) {
-        // 加载激励视频广告
-        HiGameConfig config = new HiGameConfig();
-        String posId = config.getString("reward_pos_id");
-        RewardAdManager reward=new RewardAdManager(context, posId);
-        reward.load(context);
-
-    }
+//
+//    private void loadBanner(Context context) {
+//        // 检查传入的广告对象是否是 BannerAdApter 类型的实例
+//        HiGameConfig config = new HiGameConfig();
+//        String posId = config.getString("banner_pos_id");
+//        BannerAdManager banner = new BannerAdManager(context, posId);
+//        banner.load(context);
+//    }
+//
+//    private void loadInterstitial(Context context ) {
+//        // 加载插屏广告
+//        HiGameConfig config = new HiGameConfig();
+//        String posId = config.getString("inters_pos_id");
+//        InterstitialAdManager interstitial = new InterstitialAdManager(context, posId);
+//        interstitial.load(context);
+//    }
+//
+//    private void loadReward(Context context) {
+//        // 加载激励视频广告
+//        HiGameConfig config = new HiGameConfig();
+//        String posId = config.getString("reward_pos_id");
+//        RewardAdManager reward=new RewardAdManager(context, posId);
+//        reward.load(context);
+//
+//    }
 }

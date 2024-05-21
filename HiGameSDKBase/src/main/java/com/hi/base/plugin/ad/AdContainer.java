@@ -12,13 +12,12 @@ public class AdContainer {
     public static int POS_BOTTOM = 2;
 
     /**
-     * 生成banner广告的容器，在页面底部
+     * 生成banner广告的容器，在页面顶部或底部
      * @param activity
-     * @param pos  banner所在位置， 1：顶部；2：底部
+     * @param pos banner所在位置，1：顶部；2：底部
      * @return
      */
-    public static ViewGroup generateBannerViewContainer(Activity activity, int pos){
-
+    public static ViewGroup generateBannerViewContainer(Activity activity, int pos) {
         View decorView = activity.getWindow().getDecorView();
         FrameLayout contentParent =
                 (FrameLayout) decorView.findViewById(android.R.id.content);
@@ -28,25 +27,27 @@ public class AdContainer {
         layout.setGravity(Gravity.FILL_HORIZONTAL);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         contentParent.addView(layout, layoutParams);
-        //layout_gravity should be set after addView called.
-        if(pos == POS_TOP){
-            ((FrameLayout.LayoutParams)layout.getLayoutParams()).gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
-        }else{
-            ((FrameLayout.LayoutParams)layout.getLayoutParams()).gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
-        }
-        layout.requestLayout();
 
+        // 设置layout_gravity
+        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) layout.getLayoutParams();
+        if (pos == POS_TOP) {
+            params.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+        } else {
+            params.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
+        }
+        layout.setLayoutParams(params);
+
+        layout.requestLayout();
         return layout;
     }
 
-    public static void destroySelf(View child){
-
-        if (child != null){
-            ViewGroup parent = (ViewGroup)child.getParent();
-            if (parent != null && parent instanceof ViewGroup) {
-                parent.removeView(child);
+    public static void destroySelf(ViewGroup container) {
+        if (container != null) {
+            ViewGroup parent = (ViewGroup) container.getParent();
+            if (parent != null) {
+                parent.removeView(container);
             }
-
+            container.removeAllViews();
         }
     }
 }

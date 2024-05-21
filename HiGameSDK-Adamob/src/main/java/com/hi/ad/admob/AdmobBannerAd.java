@@ -36,6 +36,28 @@ public class AdmobBannerAd extends BannerAdApter {
     }
 
     @Override
+    public void close() {
+        super.close();
+        Log.d(Constants.TAG, "AdmobBannerAd close.");
+        Log.d(Constants.TAG, "AdmobBannerAd bannerContainer: " + bannerContainer+ " || bannerAd: " + bannerAd);
+        if (bannerAd != null) {
+            bannerAd.destroy();
+            if (bannerContainer != null) {
+                bannerContainer.removeAllViews();
+                AdContainer.destroySelf(bannerContainer);
+                Log.d(Constants.TAG, "AdmobBannerAd resources have been cleaned up.");
+            }
+            if (bannerAdListener != null){
+                bannerAdListener.onClosed();
+            }
+            bannerAd = null;
+            loading = false;
+            ready = false;
+            Log.d(Constants.TAG, "AdmobBannerAd resources have been cleaned up.");
+        }
+    }
+
+    @Override
     public boolean isReady() {
         return ready;
     }

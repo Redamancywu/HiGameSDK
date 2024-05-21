@@ -37,13 +37,6 @@ public class InterstitialAdManager {
             }
         }, RELOAD_DELAY_MS);
     }
-    private static InterstitialAdManager instance;
-    public static InterstitialAdManager getInstance() {
-        if (instance==null){
-            instance=new InterstitialAdManager();
-        }
-        return instance;
-    }
     /**
      * 游戏层调用时传入的广告回调监听器
      */
@@ -107,14 +100,9 @@ public class InterstitialAdManager {
             }
         }
     };
-
-    public InterstitialAdManager() {
-    }
-
     public InterstitialAdManager(Context context, String posId) {
         this.posId=posId;
         this.context = context;
-        Log.d(Constants.TAG, TAG+ "InterstitialAdManager posId:"+posId+"TYPE:"+TYPE);
         registerPlugin(HiAdManager.getInstance().getChild(TYPE));
     }
     /**
@@ -138,10 +126,8 @@ public class InterstitialAdManager {
             Log.w(Constants.TAG, TAG+ "registerPlugin in InterstitialAd failed. plugin instantiation failed");
             return;
         }
-
         this.plugin.setAdListener(adExListener);
         this.plugin.init(context, pluginInfo.getGameConfig());
-        load(context);
     }
 
 

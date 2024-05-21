@@ -74,7 +74,6 @@ public  class AdmobInterstitialAd extends InterstitialAdAdapter {
                         if (adListener != null) {
                             adListener.onLoaded();
                         }
-
                     }
 
                     @Override
@@ -100,7 +99,6 @@ public  class AdmobInterstitialAd extends InterstitialAdAdapter {
             }
             return;
         }
-
         mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
             @Override
             public void onAdClicked() {

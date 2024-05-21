@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.hi.base.manger.HiAdManager;
 import com.hi.base.model.HiAdType;
@@ -144,7 +145,6 @@ public class BannerAdManager {
         this.bannerAdListener = (BannerAdListener) plugin;
         this.bannerAdListener.setAdListener(adExListener);
         this.bannerAdListener.init(context, pluginInfo.getGameConfig());
-        load(context);
     }
 
     public void setAdListener(IBannerListener adListener) {
@@ -181,7 +181,9 @@ public class BannerAdManager {
         }
         return true;
     }
+    public void close(){
 
+    }
     /**
      * 获取BannerView
      *

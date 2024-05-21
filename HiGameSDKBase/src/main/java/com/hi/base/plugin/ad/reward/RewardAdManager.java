@@ -130,7 +130,6 @@ public class RewardAdManager {
         this.plugin = (IRewardAd) pluginInstance;
         this.plugin.setAdListener(adExListener);
         this.plugin.init(context, pluginInfo.getGameConfig());
-        load(context);
     }
 
     public void setAdListener(IRewardAdListener adListener) {

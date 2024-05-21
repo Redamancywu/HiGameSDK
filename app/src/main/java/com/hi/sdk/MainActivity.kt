@@ -86,7 +86,13 @@ class MainActivity : AppCompatActivity() {
         bindings!!.button3.setOnClickListener { IntervalAd()   }
         bindings!!.bthLoginGoogle.setOnClickListener { GoogleLogin() }
         bindings!!.video.setOnClickListener { showReward() }
+        bindings!!.bthCloseBanner.setOnClickListener { closeBanner() }
 
+    }
+
+    private fun closeBanner() {
+       // TODO("Not yet implemented")
+        HiGameSDK.getInstance().closeBanner()
     }
 
     override fun onStart() {
