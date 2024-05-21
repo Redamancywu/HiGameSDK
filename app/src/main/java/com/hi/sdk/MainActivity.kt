@@ -103,13 +103,13 @@ class MainActivity : AppCompatActivity() {
 
         // 调用 onCustomEvent 方法
         onCustomEvent("custom_event", eventData)
-        HiGameSDK.getInstance().showRewardVideo(this)
+        HiGameSDK.getInstance().showRewardVideo()
 
     }
 
     private fun showBannerAd() {
       //  TODO("Not yet implemented")
-        HiGameSDK.getInstance().showBanner(this)
+        HiGameSDK.getInstance().showBanner()
     }
 
 
@@ -121,7 +121,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun IntervalAd() {
        // TODO("Not yet implemented")
-        HiGameSDK.getInstance().showInterstitial(this)
+        HiGameSDK.getInstance().showInterstitial()
     }
 
 

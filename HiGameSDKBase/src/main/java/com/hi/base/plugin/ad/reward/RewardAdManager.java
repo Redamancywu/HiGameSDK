@@ -30,14 +30,7 @@ public class RewardAdManager {
     private static final int RELOAD_DELAY_MS = 60000; // 1 minute
     private Handler handler = new Handler();
 
-    private static RewardAdManager instance;
 
-    public static RewardAdManager getInstance() {
-        if (instance == null) {
-            instance = new RewardAdManager();
-        }
-        return instance;
-    }
 
     private IRewardAdListener adListener;
 
@@ -109,10 +102,9 @@ public class RewardAdManager {
         }
     };
 
-    private RewardAdManager() {
-    }
 
-    public void initialize(Context context, String posId) {
+
+    public  RewardAdManager(Context context, String posId) {
         this.posId = posId;
         this.context = context;
         PluginInfo pluginInfo = HiAdManager.getInstance().getChild(TYPE);

@@ -133,12 +133,17 @@ public class InterstitialAdManager {
             Log.w(Constants.TAG, TAG+ "registerPlugin in InterstitialAd failed. plugin is not implement IInterstitialAd");
             return;
         }
-
         this.plugin = (IInterstitialAd) plugin;
+        if (this.plugin == null) {
+            Log.w(Constants.TAG, TAG+ "registerPlugin in InterstitialAd failed. plugin instantiation failed");
+            return;
+        }
+
         this.plugin.setAdListener(adExListener);
         this.plugin.init(context, pluginInfo.getGameConfig());
         load(context);
     }
+
 
     public void setAdListener(IInterstitialAdListener adListener) {
         this.adListener = adListener;
@@ -153,26 +158,27 @@ public class InterstitialAdManager {
 
         return this.plugin.isReady();
     }
-
-    /**
-     * 加载广告
-     */
     public void load(Context context) {
+        if (!(context instanceof Activity)) {
+            Log.e(Constants.TAG, "InterstitialAdManager load failed. context is not an Activity");
+            if (adListener != null) {
+                adListener.onLoadFailed(Constants.CODE_LOAD_FAILED, "context is not an Activity");
+            }
+            return;
+        }
+
         if (!isPluginValid(true)) return;
 
         try {
             this.plugin.load((Activity) context, posId);
         } catch (Exception e) {
             if (adListener != null) {
-                adListener.onLoadFailed(Constants.CODE_LOAD_FAILED, "ad load failed with exception:"+e.getMessage());
+                adListener.onLoadFailed(Constants.CODE_LOAD_FAILED, "ad load failed with exception:" + e.getMessage());
             }
             e.printStackTrace();
         }
     }
 
-    /**
-     * 展示广告
-     */
     public void show(Activity context) {
         if (!isPluginValid(true)) return;
 
@@ -180,12 +186,12 @@ public class InterstitialAdManager {
             this.plugin.show(context);
         } catch (Exception e) {
             if (adListener != null) {
-                adListener.onLoadFailed(Constants.CODE_SHOW_FAILED, "ad show failed with exception:"+e.getMessage());
+                adListener.onLoadFailed(Constants.CODE_SHOW_FAILED, "ad show failed with exception:" + e.getMessage());
             }
             e.printStackTrace();
         }
-
     }
+
 
 
     // 判断当前插件实现类是否存在

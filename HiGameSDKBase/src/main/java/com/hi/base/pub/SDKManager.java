@@ -26,6 +26,7 @@ import com.hi.base.plugin.ad.banner.BannerAdManager;
 import com.hi.base.plugin.ad.banner.IBannerListener;
 import com.hi.base.plugin.ad.inters.IInterstitialAdListener;
 import com.hi.base.plugin.ad.inters.InterstitialAdManager;
+import com.hi.base.plugin.ad.reward.IRewardAdListener;
 import com.hi.base.plugin.ad.reward.RewardAdManager;
 import com.hi.base.plugin.itf.IInitCallback;
 import com.hi.base.plugin.pay.IPayCallBack;
@@ -39,6 +40,7 @@ import java.util.HashMap;
 public class SDKManager {
     private static SDKManager instance;
     private HiGameListener listener;
+    private String posId;
 
     public static SDKManager getInstance() {
         if (instance == null) {
@@ -46,13 +48,14 @@ public class SDKManager {
         }
         return instance;
     }
-
+    private Context mContext;
     private ViewGroup bannerContainer;
     private HiGameListener InitCallback;
 
     public void initSDK(Context context, HiGameListener listener) {
         this.listener = listener;
         this.InitCallback = listener; // 将 listener 赋给 InitCallback
+        mContext = context;
         onCreate((Activity) context);
         HiPluginManger.getInstance().InitPlugin(context);
         //初始化SDK
@@ -98,144 +101,188 @@ public class SDKManager {
 
     private IBannerListener bannerListener;
 
-    public void loadBanner(Context context, String posId) {
-        BannerAdManager.getInstance().load(context);
+    public void showBanner() {
         //显示banner广告
-//        BannerAdManager bannerAd = new BannerAdManager(context, posId);
-//        bannerAd.setAdSize(AdSize.BANNER_SIZE);
-//        bannerAd.setAdListener(new IBannerListener() {
-//            @Override
-//            public void onFailed(int code, String msg) {
-//                Log.e(Constants.TAG, "banner广告加载失败");
-//            }
-//
-//            @Override
-//            public void onLoadFailed(int code, String msg) {
-//                Log.e(Constants.TAG, "banner广告加载失败");
-//                bannerAd.load(context);
-//            }
-//
-//            @Override
-//            public void onLoaded() {
-//                Log.d(Constants.TAG, "banner广告加载成功");
-//                Log.d(Constants.TAG, "banner广告加载:" + bannerAd.isReady());
-////                if (bannerAd.isReady()) {
-////                    bannerContainer = AdContainer.generateBannerViewContainer((Activity) context, AdContainer.POS_BOTTOM);
-////                    bannerContainer.addView(bannerAd.getBannerView());
-////
-////                }
-//            }
-//
-//            @Override
-//            public void onShow() {
-//                Log.d(Constants.TAG, "banner广告展示");
-//
-//            }
-//
-//            @Override
-//            public void onClicked() {
-//                Log.d(Constants.TAG, "banner广告点击");
-//            }
-//
-//            @Override
-//            public void onClosed() {
-//                Log.d(Constants.TAG, "banner广告关闭");
-//                bannerAd.load(context);
-//            }
-//
-//            @Override
-//            public void onSkip() {
-//                Log.d(Constants.TAG, "banner广告跳过");
-//            }
-//        });
-//        bannerAd.load(context);
+        BannerAdManager bannerAd = new BannerAdManager(mContext, "banner_pos_id");
+        bannerAd.setAdSize(AdSize.BANNER_SIZE);
+        bannerAd.setAdListener(new IBannerListener() {
+            @Override
+            public void onFailed(int code, String msg) {
+                Log.e(Constants.TAG, "banner广告加载失败");
+            }
+
+            @Override
+            public void onLoadFailed(int code, String msg) {
+                Log.e(Constants.TAG, "banner广告加载失败");
+                bannerAd.load(mContext);
+            }
+
+            @Override
+            public void onLoaded() {
+                Log.d(Constants.TAG, "banner广告加载成功");
+                Log.d(Constants.TAG, "banner广告加载:" + bannerAd.isReady());
+                if (bannerAd.isReady()) {
+                    bannerContainer = AdContainer.generateBannerViewContainer((Activity) mContext, AdContainer.POS_BOTTOM);
+                    bannerContainer.addView(bannerAd.getBannerView());
+
+                }
+            }
+
+            @Override
+            public void onShow() {
+                Log.d(Constants.TAG, "banner广告展示");
+
+            }
+
+            @Override
+            public void onClicked() {
+                Log.d(Constants.TAG, "banner广告点击");
+            }
+
+            @Override
+            public void onClosed() {
+                Log.d(Constants.TAG, "banner广告关闭");
+                bannerAd.load(mContext);
+            }
+
+            @Override
+            public void onSkip() {
+                Log.d(Constants.TAG, "banner广告跳过");
+            }
+        });
+        bannerAd.load(mContext);
     }
 
-    public void showBanner(Activity activity) {
-        Log.d(Constants.TAG, "showBanner");
-        HiGameConfig config = new HiGameConfig();
-        String posId = config.getString("banner_pos_id");
-        BannerAdManager bannerAdManager = new BannerAdManager(activity, posId);
-      //  bannerAdManager.setAdSize(AdSize.BANNER_SIZE);
-        bannerAdManager.show(activity);
-     //   BannerAdManager.getInstance().show(activity);
+//    public void showBanner(Activity activity) {
+//        Log.d(Constants.TAG, "showBanner");
+//        HiGameConfig config = new HiGameConfig();
+//        String posId = config.getString("banner_pos_id");
+//        BannerAdManager bannerAdManager = new BannerAdManager(activity, posId);
+//      //  bannerAdManager.setAdSize(AdSize.BANNER_SIZE);
+//        bannerAdManager.show(activity);
+//     //   BannerAdManager.getInstance().show(activity);
+//
+//
+//    }
 
+    public void showInterstitialAd() {
+        InterstitialAdManager inters = new InterstitialAdManager(mContext, "inters_pos_id");
+        inters.setAdListener(new IInterstitialAdListener() {
+            @Override
+            public void onFailed(int code, String msg) {
+                Log.d(Constants.TAG, "插屏广告加载失败");
+            }
 
+            @Override
+            public void onLoadFailed(int code, String msg) {
+                Log.d(Constants.TAG, "插屏广告加载失败");
+                inters.load(mContext);
+            }
+
+            @Override
+            public void onLoaded() {
+                Log.d(Constants.TAG, "插屏广告加载成功");
+                if (inters.isReady()) {
+                    inters.show((Activity) mContext);
+                }
+            }
+
+            @Override
+            public void onShow() {
+
+                Log.d(Constants.TAG, "插屏广告展示");
+            }
+
+            @Override
+            public void onClicked() {
+
+                Log.d(Constants.TAG, "插屏广告点击");
+            }
+
+            @Override
+            public void onClosed() {
+                Log.d(Constants.TAG, "插屏广告关闭");
+                inters.load(mContext);
+            }
+
+            @Override
+            public void onSkip() {
+
+                Log.d(Constants.TAG, "插屏广告跳过");
+            }
+        });
+        inters.load(mContext);
     }
 
-    public void loadInterstitialAd(Context context) {
-        InterstitialAdManager.getInstance().load(context);
-//        InterstitialAdManager inters = new InterstitialAdManager(context, posId);
-//        inters.setAdListener(new IInterstitialAdListener() {
-//            @Override
-//            public void onFailed(int code, String msg) {
-//                Log.d(Constants.TAG, "插屏广告加载失败");
-//            }
+//    public void showInters(Activity activity) {
+//        Log.d(Constants.TAG, "showInters");
+//      //  InterstitialAdManager.getInstance().show(activity);
+//        HiGameConfig config = new HiGameConfig();
+//        String posId = config.getString("inters_pos_id");
+//        InterstitialAdManager interstitialAdManager = new InterstitialAdManager(activity, posId);
+//        interstitialAdManager.show(activity);
+//        Log.d(Constants.TAG, "插屏广告准备就绪：" + interstitialAdManager.isReady());
+//        if (interstitialAdManager.isReady()) {
+//            Log.d(Constants.TAG, "插屏广告准备就绪：" + interstitialAdManager.isReady());
 //
-//            @Override
-//            public void onLoadFailed(int code, String msg) {
-//                Log.d(Constants.TAG, "插屏广告加载失败");
-//                inters.load(context);
-//            }
-//
-//            @Override
-//            public void onLoaded() {
-//                Log.d(Constants.TAG, "插屏广告加载成功");
-////                if (inters.isReady()) {
-////                    inters.show(context);
-////                }
-//            }
-//
-//            @Override
-//            public void onShow() {
-//
-//                Log.d(Constants.TAG, "插屏广告展示");
-//            }
-//
-//            @Override
-//            public void onClicked() {
-//
-//                Log.d(Constants.TAG, "插屏广告点击");
-//            }
-//
-//            @Override
-//            public void onClosed() {
-//                Log.d(Constants.TAG, "插屏广告关闭");
-//                inters.load(context);
-//            }
-//
-//            @Override
-//            public void onSkip() {
-//
-//                Log.d(Constants.TAG, "插屏广告跳过");
-//            }
-//        });
-//        inters.load(context);
-    }
-
-    public void showInters(Activity activity) {
-        Log.d(Constants.TAG, "showInters");
-      //  InterstitialAdManager.getInstance().show(activity);
-        HiGameConfig config = new HiGameConfig();
-        String posId = config.getString("inters_pos_id");
-        InterstitialAdManager interstitialAdManager = new InterstitialAdManager(activity, posId);
-        interstitialAdManager.show(activity);
-        Log.d(Constants.TAG, "插屏广告准备就绪：" + interstitialAdManager.isReady());
-        if (interstitialAdManager.isReady()) {
-            Log.d(Constants.TAG, "插屏广告准备就绪：" + interstitialAdManager.isReady());
-
-        }
-    }
+//        }
+//    }
     public void showNativeAd(Activity activity) {
 
     }
-    public void showRewardAd(Activity activity){
-        RewardAdManager.getInstance().show(activity);
+    public void showRewardAd(){
 //        HiGameConfig config = new HiGameConfig();
 //        String posId = config.getString("reward_pos_id");
 //        RewardAdManager reward=new RewardAdManager(activity,posId);
 //        Log.d(Constants.TAG, "reward广告展示状态："+reward.isReady());
 //        reward.show(activity);
+        RewardAdManager reward=new RewardAdManager(mContext,"reward_pos_id");
+        reward.setAdListener(new IRewardAdListener() {
+            @Override
+            public void onRewarded(String itemName, int itemNum) {
+                Log.d(Constants.TAG, "reward广告奖励发放成功");
+            }
+
+            @Override
+            public void onFailed(int code, String msg) {
+
+            }
+
+            @Override
+            public void onLoadFailed(int code, String msg) {
+
+            }
+
+            @Override
+            public void onLoaded() {
+                if (reward.isReady()){
+                    reward.show((Activity) mContext);
+                }
+            }
+
+            @Override
+            public void onShow() {
+
+            }
+
+            @Override
+            public void onClicked() {
+
+            }
+
+            @Override
+            public void onClosed() {
+                reward.load(mContext);
+
+            }
+
+            @Override
+            public void onSkip() {
+
+            }
+        });
+        reward.load(mContext);
+
 
     }
     //自定义上报

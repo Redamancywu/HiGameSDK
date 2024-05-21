@@ -135,14 +135,14 @@ public class HiGameSDK {
 //    public void loadInterstitial(Context context,String posId){
 //        SDKManager.getInstance().loadInterstitialAd(context, posId);
 //    }
-    public void showBanner(Activity activity){
-        SDKManager.getInstance().showBanner(activity);
+    public void showBanner(){
+        SDKManager.getInstance().showBanner();
     }
-    public void showInterstitial(Activity activity){
-        SDKManager.getInstance().showInters(activity);
+    public void showInterstitial(){
+        SDKManager.getInstance().showInterstitialAd();
     }
-    public void showRewardVideo(Activity activity){
-        SDKManager.getInstance().showRewardAd(activity);
+    public void showRewardVideo(){
+        SDKManager.getInstance().showRewardAd();
     }
     //自定义上报
     public void onCustomEvent(String eventName, HashMap<String,Object> eventData){
